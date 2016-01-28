@@ -19,6 +19,7 @@ public class MenuBarNode extends MenuBar {
 	private MenuBar createMenu() {
 		
 		addFileMenu();
+		addSearch();
 		addSettingsMenu();
 		
 		return this;
@@ -52,6 +53,22 @@ public class MenuBarNode extends MenuBar {
 		});
 		
 		menuFile.getItems().addAll(exit);
+		this.getMenus().addAll(menuFile);
+	}
+	
+	// Search label to be added to the menu bar
+	private void addSearch(){
+		Menu menuFile = new Menu("Search");
+		MenuItem advancedS = new MenuItem("Advanced Search");
+		
+		// Advanced Search Pop Up goes here
+		advancedS.setOnAction(new EventHandler<ActionEvent>(){
+			@Override public void handle(ActionEvent e){
+				System.out.println("Doing an advanced search");
+			}
+		});
+		
+		menuFile.getItems().addAll(advancedS);
 		this.getMenus().addAll(menuFile);
 	}
 }
