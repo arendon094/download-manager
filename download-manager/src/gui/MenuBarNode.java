@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -21,6 +22,7 @@ public class MenuBarNode extends MenuBar {
 		addFileMenu();
 		addSearch();
 		addSettingsMenu();
+		addUsersMenu();
 		
 		return this;
 	}
@@ -70,5 +72,23 @@ public class MenuBarNode extends MenuBar {
 		
 		menuFile.getItems().addAll(advancedS);
 		this.getMenus().addAll(menuFile);
+	}
+
+	private void addUsersMenu() {
+		Menu menuUsers = new Menu("Users");
+		MenuItem login = new MenuItem("Login");
+		
+		login.setOnAction(new EventHandler<ActionEvent>(){		
+			@Override public void handle(ActionEvent e) {
+				LoginScene loginScene = new LoginScene();
+				PopUp loginStage = new PopUp("Login", loginScene.getScene());
+				loginStage.show();
+				
+			}
+		});
+		
+		menuUsers.getItems().addAll(login);
+		this.getMenus().addAll(menuUsers);
+		
 	}
 }
