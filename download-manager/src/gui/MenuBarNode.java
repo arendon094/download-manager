@@ -77,17 +77,27 @@ public class MenuBarNode extends MenuBar {
 	private void addUsersMenu() {
 		Menu menuUsers = new Menu("Users");
 		MenuItem login = new MenuItem("Login");
+		MenuItem profile = new MenuItem("Profile");
 		
 		login.setOnAction(new EventHandler<ActionEvent>(){		
 			@Override public void handle(ActionEvent e) {
-				LoginScene loginScene = new LoginScene();
+				LoginScene loginScene = new LoginScene("login");
 				PopUp loginStage = new PopUp("Login", loginScene.getScene());
 				loginStage.show();
 				
 			}
 		});
 		
-		menuUsers.getItems().addAll(login);
+		profile.setOnAction(new EventHandler<ActionEvent>(){		
+			@Override public void handle(ActionEvent e) {
+				LoginScene profileScene = new LoginScene("profile");
+				PopUp profileStage = new PopUp("Profile", profileScene.getScene());
+				profileStage.show();
+				
+			}
+		});
+		
+		menuUsers.getItems().addAll(login, profile);
 		this.getMenus().addAll(menuUsers);
 		
 	}
