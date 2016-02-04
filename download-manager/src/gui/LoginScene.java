@@ -30,7 +30,7 @@ public class LoginScene {
 	
 	public void createScene() {
         GridPane grid = new GridPane();
-        this.scene = new Scene(grid, 300, 200);
+        this.scene = new Scene(grid, 350, 200);
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(7);

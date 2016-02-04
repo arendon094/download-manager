@@ -66,7 +66,7 @@ public class MenuBarNode extends MenuBar {
 		// Advanced Search Pop Up goes here
 		advancedS.setOnAction(new EventHandler<ActionEvent>(){
 			@Override public void handle(ActionEvent e){
-				System.out.println("Doing an advanced search");
+				// Button action goes here
 			}
 		});
 		
