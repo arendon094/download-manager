@@ -1,7 +1,10 @@
 package gui;
 
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -19,6 +22,7 @@ public class ToolBarNode extends ToolBar{
 		this.getStylesheets().add("style/toolCSS.css");
 		
 		addButtons();
+		addSearchBar();
 		
 		return this;
 	}
@@ -59,5 +63,24 @@ public class ToolBarNode extends ToolBar{
 
 		this.getItems().addAll(resume,new Separator(), pause,
 				new Separator(), stop, new Separator(), up, new Separator(), down);
+	}
+	
+	private void addSearchBar(){
+		Image mGlassImage = new Image("images/mglass.png");
+		
+		final TextField searchField = new TextField("");
+        searchField.setPromptText("Search");
+        
+        Button mglass = new Button();
+		mglass.setTooltip(new Tooltip("Search"));
+		mglass.setGraphic(new ImageView(mGlassImage));
+		
+		// Moves position of both search field and button by 650 to the right
+		searchField.setTranslateX(650);
+		mglass.setTranslateX(650);
+		// Positions text inside the search field to the right
+		searchField.setAlignment(Pos.CENTER_RIGHT);
+        
+        this.getItems().addAll(searchField, mglass);
 	}
 }
