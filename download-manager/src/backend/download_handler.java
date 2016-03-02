@@ -1,0 +1,67 @@
+package downloadManager;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Date;
+
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+
+//Probably need to add threading
+public class download_handler {
+	
+	private String directory;
+	private long remeber_download;
+	private long fileSize;
+
+	  public download_handler() {
+	    	this.remeber_download = 0;
+	    }
+	  
+	public void setPath(String string_path)
+	{
+		directory = string_path;
+	}
+	
+	public void setfileSize(long size)
+	{
+		this.fileSize = size;
+	}
+	
+	public long download_file(String fileName, String ip_ad)
+    {	
+	
+	try{
+	    URL download_url = new URL(ip_ad);
+
+	    InputStream attempt_connect = download_url.openStream();
+
+	    File save_file =  new File(directory + fileName);
+	    OutputStream save_stream = new FileOutputStream(save_file);
+	    byte[] buffer = new byte[1024*8];
+	    int bytes_read = 0;
+	    
+	    int last_download_pos = 0;
+	    
+	    while((bytes_read = attempt_connect.read(buffer)) != -1)
+		{
+	    	remeber_download += bytes_read;
+	    	save_stream.write(buffer,last_download_pos,bytes_read);
+		}
+	    attempt_connect.close();
+	    save_stream.close();
+	}
+	catch (MalformedURLException e){
+	    e.printStackTrace();
+	} catch(IOException e) {
+	    e.printStackTrace();
+	}
+	
+	return remeber_download;
+    }
+}
