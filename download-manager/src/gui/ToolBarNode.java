@@ -19,7 +19,6 @@ public class ToolBarNode extends ToolBar{
 	private ToolBar createBar() {
 		
 		this.setPrefHeight(30);
-		this.getStylesheets().add("style/toolCSS.css");
 		
 		addButtons();
 		addSearchBar();

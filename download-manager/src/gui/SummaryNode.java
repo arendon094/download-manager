@@ -49,8 +49,10 @@ public class SummaryNode extends GridPane {
 		this.add(link, 0, 1, 3, 1);
 		
 		// image in rows 3-4 columns 1-3
-		Image img = new Image("images/craters.png");
+		Image img = new Image("images/craters.jpg");
 		ImageView craters = new ImageView(img);
+		craters.setFitHeight(200);
+		craters.setFitWidth(200);
 		this.add(craters, 0, 2, 3, 3);
 		
 		// resume download button row 1 column 4-5
