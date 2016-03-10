@@ -71,7 +71,7 @@ public class ToolBarNode extends ToolBar{
 	}
 	
 	private void addSearchBar(){
-		Image mGlassImage = new Image("images/mglass.png");
+		Image mGlassImage = new Image("images/mag_gla.png");
 		
 		final TextField searchField = new TextField("");
         searchField.setPromptText("Search");
@@ -81,8 +81,8 @@ public class ToolBarNode extends ToolBar{
 		mglass.setGraphic(new ImageView(mGlassImage));
 		
 		// Moves position of both search field and button by 650 to the right
-		searchField.setTranslateX(650);
-		mglass.setTranslateX(650);
+		searchField.setTranslateX(575);
+		mglass.setTranslateX(575);
 		// Positions text inside the search field to the right
 		searchField.setAlignment(Pos.CENTER_RIGHT);
         
