@@ -19,11 +19,13 @@ public class DownloadManagerGUI extends Application {
 	public void start(Stage primaryStage) {
 
 		BorderPane borderPane = new BorderPane();
+		
+		borderPane.getStylesheets().add("style/metroLight.css");
+		borderPane.getStyleClass().add("background");
 
 		// Create the stage and main pane
 		primaryStage.setTitle("JPL Download Manager");
 		Scene scene = new Scene(borderPane, 1100, 800);
-		scene.getStylesheets().add("style/metroLight.css");
 
 		sceneHeight = scene.heightProperty();
 		sceneWidth = scene.widthProperty();
@@ -37,10 +39,13 @@ public class DownloadManagerGUI extends Application {
 		VBox topPane = new VBox();
 
 		MenuBarNode menu = new MenuBarNode();
-		ToolBarNode toolBar = new ToolBarNode();
+		menu.getStyleClass().add("background");
 
+		ToolBarNode toolBar = new ToolBarNode();
+		
+		Separator newSep = new Separator();
 		// Add the items to the topPane
-		topPane.getChildren().addAll(menu, toolBar);
+		topPane.getChildren().addAll(menu, newSep, toolBar);
 
 		// Set top pane to the borderPane layout
 		borderPane.setTop(topPane);

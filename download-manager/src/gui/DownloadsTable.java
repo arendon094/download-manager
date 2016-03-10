@@ -18,22 +18,21 @@ public class DownloadsTable extends VBox{
 		// Need to add type to tableview once we create
 		// class for data
 		TableView downloadsTable = new TableView();
-
-		Label downloadLabel = new Label("My Downloads");
-		downloadLabel.setFont(new Font("Calibri", 15));
-		this.setAlignment(Pos.TOP_CENTER);
-
-		downloadsTable.setEditable(true);
-
+		
+		TableColumn downloads = new TableColumn("Downloads");
+		
 		TableColumn fileName = new TableColumn("File Name");
 		TableColumn size = new TableColumn("Size");
 		TableColumn downloaded = new TableColumn("Downloaded");
-
-		downloadsTable.getColumns().addAll(fileName, size, downloaded);
-
+		TableColumn created = new TableColumn("Created");
+		TableColumn encrypted = new TableColumn("Encrypted?");
+		
+		downloads.getColumns().addAll(fileName, size, downloaded, created, encrypted);
+		downloadsTable.getColumns().addAll(downloads);
+		
 		this.setSpacing(5);
 		this.setPadding(new Insets(10, 10, 10, 10));
-		this.getChildren().addAll(downloadLabel, downloadsTable);
+		this.getChildren().addAll(downloadsTable);
 	}
 
 }

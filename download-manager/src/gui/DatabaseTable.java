@@ -18,13 +18,9 @@ public class DatabaseTable extends VBox {
 		// Need to add type to tableview once we create
 		// class for data
 		TableView dbTable = new TableView();
-
-		Label dbLabel = new Label("JPL Database");
-		dbLabel.setFont(new Font("Calibri", 15));
-		this.setAlignment(Pos.TOP_CENTER);
-
-		dbTable.setEditable(true);
-
+	
+		TableColumn database = new TableColumn("JPL");
+	    
 		TableColumn fileName = new TableColumn("File Name");
 		TableColumn size = new TableColumn("Size");
 		TableColumn status = new TableColumn("Status");
@@ -32,11 +28,12 @@ public class DatabaseTable extends VBox {
 		TableColumn remaining = new TableColumn("Time Remaining");
 		TableColumn created = new TableColumn("Created");
 		TableColumn encrypted = new TableColumn("Encrypted?");
-
-		dbTable.getColumns().addAll(fileName, size, status, speed, remaining, created, encrypted);
+		
+		dbTable.getColumns().addAll(database);
+		database.getColumns().addAll(fileName, size, status, speed, remaining, created, encrypted);
 		
 		this.setSpacing(5);
 		this.setPadding(new Insets(10, 10, 10, 10));
-		this.getChildren().addAll(dbLabel, dbTable);	
+		this.getChildren().addAll(dbTable);	
 	}
 }

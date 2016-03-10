@@ -19,6 +19,7 @@ public class ToolBarNode extends ToolBar{
 	private ToolBar createBar() {
 		
 		this.setPrefHeight(30);
+		this.getStyleClass().add("background");
 		
 		addButtons();
 		addSearchBar();
@@ -29,39 +30,44 @@ public class ToolBarNode extends ToolBar{
 	private void addButtons() {
 		
 		// Note all the icons are 16px
-		Image resumeImage = new Image("images/resume.png");
-		Image pauseImage = new Image("images/pause.png");
-		Image stopImage = new Image("images/stop.png");
-		Image upImage = new Image("images/up.png");
-		Image downImage = new Image("images/down.png");
+		Image resumeImage = new Image("images/play3.png");
+		Image pauseImage = new Image("images/pause3.png");
+		Image stopImage = new Image("images/stop3.png");
+		Image upImage = new Image("images/up3.png");
+		Image downImage = new Image("images/down3.png");
+		Image deleteImage = new Image("images/delete2.png");
 
-		
 		Button resume = new Button();
 		resume.setTooltip(new Tooltip("Resume"));
 		resume.setGraphic(new ImageView(resumeImage));
-
+		resume.getStyleClass().add("button-icon");
 		
 		Button pause = new Button();
 		pause.setTooltip(new Tooltip("Pause"));
 		pause.setGraphic(new ImageView(pauseImage));
+		pause.getStyleClass().add("button-icon");
 
-		
 		Button stop = new Button();
 		stop.setTooltip(new Tooltip("Stop"));
 		stop.setGraphic(new ImageView(stopImage));
-
+		stop.getStyleClass().add("button-icon");
 		
 		Button up = new Button();
 		up.setTooltip(new Tooltip("up"));
 		up.setGraphic(new ImageView(upImage));
-
-		
+		up.getStyleClass().add("button-icon");
+	
 		Button down = new Button();
 		down.setTooltip(new Tooltip("down"));
 		down.setGraphic(new ImageView(downImage));
+		down.getStyleClass().add("button-icon");
+		
+		Button delete = new Button();
+		delete.setTooltip(new Tooltip("delete"));
+		delete.setGraphic(new ImageView(deleteImage));
+		delete.getStyleClass().add("button-icon");
 
-		this.getItems().addAll(resume,new Separator(), pause,
-				new Separator(), stop, new Separator(), up, new Separator(), down);
+		this.getItems().addAll(resume, pause, stop, up, down, delete);
 	}
 	
 	private void addSearchBar(){
