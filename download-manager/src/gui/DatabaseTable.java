@@ -22,6 +22,7 @@ public class DatabaseTable extends VBox {
 		TableColumn database = new TableColumn("JPL");
 	    
 		TableColumn fileName = new TableColumn("File Name");
+
 		TableColumn size = new TableColumn("Size");
 		TableColumn status = new TableColumn("Status");
 		TableColumn speed = new TableColumn("speed");

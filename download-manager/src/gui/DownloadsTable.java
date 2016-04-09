@@ -12,6 +12,8 @@ public class DownloadsTable extends VBox{
 
 	public DownloadsTable() {
 		createTable();
+		this.getStylesheets().add("style/metroLight.css");
+		this.getStyleClass().add("background");
 	}
 
 	private void createTable() {
