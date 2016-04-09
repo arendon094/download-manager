@@ -30,12 +30,12 @@ public class ToolBarNode extends ToolBar{
 	private void addButtons() {
 		
 		// Note all the icons are 16px
-		Image resumeImage = new Image("images/play3.png");
-		Image pauseImage = new Image("images/pause3.png");
-		Image stopImage = new Image("images/stop3.png");
-		Image upImage = new Image("images/up3.png");
-		Image downImage = new Image("images/down3.png");
-		Image deleteImage = new Image("images/delete2.png");
+		Image resumeImage = new Image("images/play-16.png");
+		Image pauseImage = new Image("images/pause-16.png");
+		Image stopImage = new Image("images/stop-16.png");
+		Image upImage = new Image("images/up-16.png");
+		Image downImage = new Image("images/down-16.png");
+		Image deleteImage = new Image("images/delete-16.png");
 
 		Button resume = new Button();
 		resume.setTooltip(new Tooltip("Resume"));
@@ -71,7 +71,7 @@ public class ToolBarNode extends ToolBar{
 	}
 	
 	private void addSearchBar(){
-		Image mGlassImage = new Image("images/mglass.png");
+		Image mGlassImage = new Image("images/search-16.png");
 		
 		final TextField searchField = new TextField("");
         searchField.setPromptText("Search");
@@ -79,10 +79,12 @@ public class ToolBarNode extends ToolBar{
         Button mglass = new Button();
 		mglass.setTooltip(new Tooltip("Search"));
 		mglass.setGraphic(new ImageView(mGlassImage));
+		mglass.getStyleClass().add("button-icon");
+
 		
 		// Moves position of both search field and button by 650 to the right
-		searchField.setTranslateX(650);
-		mglass.setTranslateX(650);
+		searchField.setTranslateX(450);
+		mglass.setTranslateX(450);
 		// Positions text inside the search field to the right
 		searchField.setAlignment(Pos.CENTER_RIGHT);
         
