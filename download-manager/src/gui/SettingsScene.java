@@ -39,6 +39,8 @@ public class SettingsScene {
 		root.setPadding(new Insets(5));
 		this.scene = new Scene(root, 450, 350);
 		String userDirectoryString = System.getProperty("user.home");
+		root.getStylesheets().add("style/metroLight.css");
+        root.getStyleClass().add("background");
 
 		// directory button
 		Button btnOpenDirectoryChooser = new Button("...");

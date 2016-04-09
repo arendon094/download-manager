@@ -38,11 +38,13 @@ public class LoginScene {
 	
 	private void createScene() {
         GridPane grid = new GridPane();
-        this.scene = new Scene(grid, 350, 200);
+        this.scene = new Scene(grid, 500, 200);
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(7);
         grid.setPadding(new Insets(25, 25, 25, 25));
+        grid.getStylesheets().add("style/metroLight.css");
+        grid.getStyleClass().add("background");
         
         Label userNameLabel = new Label("User Name:");
         grid.add(userNameLabel, 0, 1);
@@ -99,6 +101,8 @@ public class LoginScene {
         grid.setHgap(10);
         grid.setVgap(7);
         grid.setPadding(new Insets(25, 25, 25, 25));
+        grid.getStylesheets().add("style/metroLight.css");
+        grid.getStyleClass().add("background");
         
         Label userNameLabel = new Label("User Name:");
         grid.add(userNameLabel, 0, 0);
@@ -106,12 +110,14 @@ public class LoginScene {
         Text userName = new Text();
         //get username
         userName.setText("Bobs123");
+        userName.setFill(Color.WHITE);
         grid.add(userName, 1, 0);
         
         Label nameLabel = new Label("Name:");
         grid.add(nameLabel, 0, 1);
         
         Text name = new Text();
+        name.setFill(Color.WHITE);
         //get name
         name.setText("Bob Smith");
         grid.add(name, 1, 1);
@@ -122,6 +128,7 @@ public class LoginScene {
         Text password = new Text();
         //get pass?
         password.setText("*****");
+        password.setFill(Color.WHITE);
         grid.add(password, 1, 2);
         
         Label emailLabel = new Label("Email:");
@@ -130,6 +137,7 @@ public class LoginScene {
         Text email = new Text();
       //get email
         email.setText("Bobs321@email.com");
+        email.setFill(Color.WHITE);
         grid.add(email, 1, 3);
         
         Button editBtn = new Button();
@@ -167,6 +175,8 @@ public class LoginScene {
         grid.setHgap(10);
         grid.setVgap(7);
         grid.setPadding(new Insets(25, 25, 25, 25));
+        grid.getStylesheets().add("style/metroLight.css");
+        grid.getStyleClass().add("background");
         
         Label nameLabel = new Label("Name:");
         grid.add(nameLabel, 0, 1);

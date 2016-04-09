@@ -25,7 +25,7 @@ public class DownloadManagerGUI extends Application {
 
 		// Create the stage and main pane
 		primaryStage.setTitle("JPL Download Manager");
-		Scene scene = new Scene(borderPane, 1100, 800);
+		Scene scene = new Scene(borderPane, 1300, 800);
 
 		sceneHeight = scene.heightProperty();
 		sceneWidth = scene.widthProperty();
