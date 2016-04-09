@@ -3,11 +3,14 @@ package gui;
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class DownloadManagerGUI extends Application {
@@ -42,10 +45,9 @@ public class DownloadManagerGUI extends Application {
 		menu.getStyleClass().add("background");
 
 		ToolBarNode toolBar = new ToolBarNode();
-		
-		Separator newSep = new Separator();
+
 		// Add the items to the topPane
-		topPane.getChildren().addAll(menu, newSep, toolBar);
+		topPane.getChildren().addAll(menu, new Separator(), toolBar, new Separator());
 
 		// Set top pane to the borderPane layout
 		borderPane.setTop(topPane);
@@ -58,12 +60,22 @@ public class DownloadManagerGUI extends Application {
 		bottomPane.setSpacing(10);
 
 		SummaryNode summary = new SummaryNode();
-
+		
+		Text t = new Text(10, 50, "No image selected");
+		VBox v = new VBox(t);
+		t.getStyleClass().add("background");
+		t.setFill(Color.WHITE);
+		v.setAlignment(Pos.CENTER);
+		v.setPrefHeight(300);
+	
+		
 		// Add item to the bottomPane
-		bottomPane.getChildren().addAll(new Separator(), summary);
+		bottomPane.getChildren().addAll(new Separator(), v);
+		
 
 		// Set bottom pane to the borderPane layout
 		borderPane.setBottom(bottomPane);
+		bottomPane.setPrefHeight(300);
 
 		// Add the scene to the stage
 		primaryStage.setScene(scene);
