@@ -1,0 +1,16 @@
+.button {
+    -fx-background-color: transparent, transparent, transparent, transparent;
+}
+
+.button:hover{
+    -fx-background-color: transparent, rgba(0,0,0,.1), rgba(0,0,0,.1), transparent;
+}
+
+.button:pressed {
+    -fx-background-color: transparent, rgba(0,0,0,.1), rgba(0,0,0,.1), rgba(0,0,0,.2);
+}
+
+.button {
+	-fx-scale-y: .9;
+	-fx-scale-x: .9;
+}
