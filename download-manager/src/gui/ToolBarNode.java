@@ -1,9 +1,9 @@
 package gui;
 
-import javafx.geometry.Insets;
+import com.github.axet.wget.Downloader;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
 import javafx.scene.control.Tooltip;
@@ -41,6 +41,12 @@ public class ToolBarNode extends ToolBar{
 		resume.setTooltip(new Tooltip("Resume"));
 		resume.setGraphic(new ImageView(resumeImage));
 		resume.getStyleClass().add("button-icon");
+		
+		resume.setOnAction((event) -> {
+			Downloader downloader = new Downloader();
+			downloader.run();
+			System.out.println("running.....?");
+		});
 		
 		Button pause = new Button();
 		pause.setTooltip(new Tooltip("Pause"));
@@ -81,7 +87,6 @@ public class ToolBarNode extends ToolBar{
 		mglass.setGraphic(new ImageView(mGlassImage));
 		mglass.getStyleClass().add("button-icon");
 
-		
 		// Moves position of both search field and button by 650 to the right
 		searchField.setTranslateX(450);
 		mglass.setTranslateX(450);

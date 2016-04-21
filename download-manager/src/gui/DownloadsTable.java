@@ -25,11 +25,13 @@ public class DownloadsTable extends VBox{
 		
 		TableColumn fileName = new TableColumn("File Name");
 		TableColumn size = new TableColumn("Size");
-		TableColumn downloaded = new TableColumn("Downloaded");
+		TableColumn status = new TableColumn("Status");
+		TableColumn speed = new TableColumn("speed");
+		TableColumn remaining = new TableColumn("Time Remaining");
 		TableColumn created = new TableColumn("Created");
 		TableColumn encrypted = new TableColumn("Encrypted?");
 		
-		downloads.getColumns().addAll(fileName, size, downloaded, created, encrypted);
+		downloads.getColumns().addAll(fileName, size, status, speed, created, encrypted);
 		downloadsTable.getColumns().addAll(downloads);
 		
 		this.setSpacing(5);

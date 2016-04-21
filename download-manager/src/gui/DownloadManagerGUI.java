@@ -19,7 +19,7 @@ public class DownloadManagerGUI extends Application {
 	private ReadOnlyDoubleProperty sceneWidth;
 	private ReadOnlyDoubleProperty paneWidth;
 
-	public void start(Stage primaryStage) {
+	public void start(Stage primaryStage) throws Exception {
 
 		BorderPane borderPane = new BorderPane();
 		
@@ -85,7 +85,7 @@ public class DownloadManagerGUI extends Application {
 
 	}
 
-	public HBox createCenter() {
+	public HBox createCenter() throws Exception {
 		HBox center = new HBox();
 		center.prefWidthProperty().bind(paneWidth);	
 
