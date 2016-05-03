@@ -34,11 +34,18 @@ public class SettingsScene {
 	}
 
 	private void createScene() {
+		
+		LocalInfo directory = new LocalInfo();
+		String path = directory.getDirectory();
+		
+		System.out.println(path);
+		
+		String userDirectoryString = System.getProperty("user.home");
+
 
 		FlowPane root = new FlowPane(Orientation.HORIZONTAL, 5, 5);
 		root.setPadding(new Insets(5));
 		this.scene = new Scene(root, 450, 350);
-		String userDirectoryString = System.getProperty("user.home");
 		root.getStylesheets().add("style/metroLight.css");
         root.getStyleClass().add("background");
 
@@ -146,14 +153,12 @@ public class SettingsScene {
 			public void handle(ActionEvent event) {
 				DirectoryChooser directoryChooser = new DirectoryChooser();
 				directoryChooser.setInitialDirectory(new File(userDirectoryString + "/Downloads"));
-				System.out.println(userDirectoryString);
 				File selectedDirectory = directoryChooser.showDialog(null);
 
 				if (selectedDirectory == null) {
 					DestTxt.setText("No Directory selected");
 				} else {
 					DestTxt.setText(selectedDirectory.getAbsolutePath());
-					System.out.println(selectedDirectory.getAbsolutePath());
 				}
 			}
 		});
@@ -175,19 +180,6 @@ public class SettingsScene {
 		root.getChildren().add(limitChoices);
 		root.getChildren().add(limitChoices1);
 		root.getChildren().add(schedulerBox);
-
-		// //Checkbox event
-		// checkBox.setOnAction((event) -> {
-		// selected = checkBox.isSelected();
-		// System.out.println("CheckBox Action (selected: " + selected + ")");
-		// if (selected){
-		//
-		//
-		// }
-		//
-		// });
-		//
-		// selected=false;
 
 	}
 

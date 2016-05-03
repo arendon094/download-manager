@@ -42,11 +42,11 @@ public class ToolBarNode extends ToolBar{
 		resume.setGraphic(new ImageView(resumeImage));
 		resume.getStyleClass().add("button-icon");
 		
-		resume.setOnAction((event) -> {
-			Downloader downloader = new Downloader();
-			downloader.run();
-			System.out.println("running.....?");
-		});
+//		resume.setOnAction((event) -> {
+//			Downloader downloader = new Downloader();
+//			downloader.run();
+//			System.out.println("running.....?");
+//		});
 		
 		Button pause = new Button();
 		pause.setTooltip(new Tooltip("Pause"));

@@ -12,9 +12,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
+
+import com.github.axet.wget.Downloader;
+
 
 public class DatabaseTable extends VBox {
 	
@@ -56,6 +60,19 @@ public class DatabaseTable extends VBox {
 		xstream.ignoreUnknownElements();
 		xstream.processAnnotations(Contents.class);
 		xstream.processAnnotations(ListBucketResult.class);
+		
+		dbTable.setRowFactory( tv -> {
+		    TableRow<DownloadableFile> row = new TableRow<>();
+		    row.setOnMouseClicked(event -> {
+		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+		            DownloadableFile rowData = row.getItem();
+		            Downloader download = new  Downloader(rowData.getName());
+		            download.run();
+		            
+		        }
+		    });
+		    return row ;
+		});
 		
 		URL cf = new URL("http://djhrn44g26er2.cloudfront.net");
 		String results = getResults(cf);

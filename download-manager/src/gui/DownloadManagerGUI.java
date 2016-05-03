@@ -2,7 +2,6 @@ package gui;
 
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Separator;
@@ -28,7 +27,7 @@ public class DownloadManagerGUI extends Application {
 
 		// Create the stage and main pane
 		primaryStage.setTitle("JPL Download Manager");
-		Scene scene = new Scene(borderPane, 1300, 800);
+		Scene scene = new Scene(borderPane, 1100, 800);
 
 		sceneHeight = scene.heightProperty();
 		sceneWidth = scene.widthProperty();

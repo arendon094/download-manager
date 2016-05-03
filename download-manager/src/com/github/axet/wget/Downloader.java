@@ -10,6 +10,12 @@ import com.github.axet.wget.info.DownloadInfo.Part.States;
 import com.github.axet.wget.info.ex.DownloadMultipartError;
 
 public class Downloader {
+	
+	private String url;
+	
+	public Downloader(String url) {
+		this.url = url;
+	}
 
     AtomicBoolean stop = new AtomicBoolean(false);
     DownloadInfo info;
@@ -28,6 +34,8 @@ public class Downloader {
             return String.format("%.1f kb", f);
         }
     }
+    
+    
 
     public void run() {
         try {
@@ -79,7 +87,7 @@ public class Downloader {
             };
 
             // choice file
-            URL url = new URL("http://djhrn44g26er2.cloudfront.net/Apollo15_PanCam_Mosaic_28N307E_1mp.tif");
+            URL url = new URL("http://djhrn44g26er2.cloudfront.net/" + this.url);
             // initialize url information object with or without proxy
             // info = new DownloadInfo(url, new ProxyInfo("proxy_addr", 8080, "login", "password"));
             info = new DownloadInfo(url);
