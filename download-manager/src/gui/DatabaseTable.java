@@ -21,8 +21,10 @@ import com.github.axet.wget.Downloader;
 
 
 public class DatabaseTable extends VBox {
+	private Downloader downloader;
 	
-	public DatabaseTable() throws Exception {
+	public DatabaseTable(Downloader downloader) throws Exception {
+		this.downloader = downloader;
 		createTable();
 	}
 
@@ -66,9 +68,10 @@ public class DatabaseTable extends VBox {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		            DownloadableFile rowData = row.getItem();
-		            Downloader download = new  Downloader(rowData.getName());
-		            download.run();
-		            
+		            downloader.setURL(rowData.getName());
+		            Thread t1 = new Thread(downloader);
+		            t1.start();
+		            //download.run()
 		        }
 		    });
 		    return row ;

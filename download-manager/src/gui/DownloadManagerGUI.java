@@ -1,5 +1,7 @@
 package gui;
 
+import com.github.axet.wget.Downloader;
+
 import javafx.application.Application;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.Pos;
@@ -87,12 +89,15 @@ public class DownloadManagerGUI extends Application {
 	public HBox createCenter() throws Exception {
 		HBox center = new HBox();
 		center.prefWidthProperty().bind(paneWidth);	
-
-		DatabaseTable database = new DatabaseTable();
+		
+		Downloader downloader = new Downloader();
+		
+		DatabaseTable database = new DatabaseTable(downloader);
 		database.prefWidthProperty().bind(paneWidth.divide(2));
 
 		// Create downloads table
-		DownloadsTable downloads = new DownloadsTable();
+		DownloadsTable downloads = new DownloadsTable(downloader);
+		downloads.createTable();
 		downloads.prefWidthProperty().bind(paneWidth.divide(2));
 
 		center.getChildren().addAll(database, downloads);

@@ -9,19 +9,34 @@ import com.github.axet.wget.info.DownloadInfo.Part;
 import com.github.axet.wget.info.DownloadInfo.Part.States;
 import com.github.axet.wget.info.ex.DownloadMultipartError;
 
-public class Downloader {
+public class Downloader implements Runnable {
 	
 	private String url;
 	
-	public Downloader(String url) {
+	public Downloader() {
+		
+	}
+	
+	public void setURL(String url) {
 		this.url = url;
+	}
+	
+	public String getURL() {
+		return this.url;
 	}
 
     AtomicBoolean stop = new AtomicBoolean(false);
     DownloadInfo info;
     long last;
     SpeedInfo speedInfo = new SpeedInfo();
+    
+    public SpeedInfo getSpeedInfo() {
+    	return speedInfo;
+    }
 
+    public DownloadInfo info() {
+    	return info;
+    }
     public static String formatSpeed(long s) {
         if (s > 0.1 * 1024 * 1024 * 1024) {
             float f = s / 1024f / 1024f / 1024f;
@@ -96,7 +111,21 @@ public class Downloader {
             // enable multipart download
             info.enableMultipart();
             // Choice target file or set download folder
-            File target = new File("/Users/mariahmartinez/Desktop/downloadedFile.tif");
+            String filename = url.getPath();
+            
+            String path = "/Users/mariahmartinez/Desktop/downloads/";
+            File f = new File(path + filename);
+            int version = 1;
+            String versionFileName = url.getFile().substring(0, url.getPath().length() - 4);
+            String newFilename = versionFileName;
+
+            while (f.exists()) {
+                newFilename= versionFileName + "(" + version + ")";
+                f = new File("/Users/mariahmartinez/Desktop/downloads/" + newFilename + ".tif");
+                version++;
+            }
+              
+            File target = f;
             // create wget downloader
             WGet w = new WGet(info, target);
             // init speedinfo
