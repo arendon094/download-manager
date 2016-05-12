@@ -61,7 +61,12 @@ public class DownloadsTable extends VBox{
         
 		Runnable helloRunnable = new Runnable() {
 		    public void run() {
-		        refresh();
+		    	try {
+		    		refresh();
+		    	}catch(Exception e) {
+		    		e.printStackTrace();
+		    		throw new RuntimeException(e);
+		    	}
 		    }
 		};
 
@@ -70,7 +75,8 @@ public class DownloadsTable extends VBox{
 	}
 	
 	public void refresh() {
-		File[] dir = new File("/Users/mariahmartinez/Desktop/downloads").listFiles();
+		File[] dir = new File(downloader.getDirectory()).listFiles();
+		if(dir.length != 0) {
 		ObservableList<DownloadingFile> list = FXCollections.observableArrayList();
 		
 		for (File file : dir ) {
@@ -101,11 +107,13 @@ public class DownloadsTable extends VBox{
 				list.add(new DownloadingFile(file.getName(), speed, size));
 			}
 		}
-		downloadsTable.setItems(list);     
+		
+		downloadsTable.setItems(list);
+		}
 	}
 		
 	private String getCurrentSize(String name) {
-		File[] dir = new File("/Users/mariahmartinez/Desktop/downloads").listFiles();
+		File[] dir = new File(downloader.getDirectory()).listFiles();
 		
 		ArrayList<File> allMatching = new ArrayList();	
 		

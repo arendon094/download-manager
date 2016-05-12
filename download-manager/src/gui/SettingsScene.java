@@ -22,8 +22,12 @@ import javafx.stage.DirectoryChooser;
 public class SettingsScene {
 	boolean selected = false;
 	private Scene scene;
-
+	private File newDirectory;
+	private File directory;
+	
 	public SettingsScene() {
+		directory = new File(System.getProperty("user.home") + "\\Downloads");
+		newDirectory = directory;
 		createScene();
 		addActions(this.scene);
 	}
@@ -34,18 +38,9 @@ public class SettingsScene {
 	}
 
 	private void createScene() {
-		
-		LocalInfo directory = new LocalInfo();
-		String path = directory.getDirectory();
-		
-		System.out.println(path);
-		
-		String userDirectoryString = System.getProperty("user.home");
-
-
 		FlowPane root = new FlowPane(Orientation.HORIZONTAL, 5, 5);
 		root.setPadding(new Insets(5));
-		this.scene = new Scene(root, 450, 350);
+		this.scene = new Scene(root, 450, 450);
 		root.getStylesheets().add("style/metroLight.css");
         root.getStyleClass().add("background");
 
@@ -78,7 +73,7 @@ public class SettingsScene {
 
 		// Define Textfieds
 		TextField DestTxt = new TextField();
-		DestTxt.setText(userDirectoryString + "/Downloads");
+		DestTxt.setText(directory.getAbsolutePath());
 		DestTxt.setPrefWidth(220);
 		TextField time=new TextField();
 		time.setText("00:00:00");
@@ -126,7 +121,7 @@ public class SettingsScene {
 
 		spinnerUp.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 1000));
 		spinnerUp.setEditable(true);
-		System.out.println(spinnerUp.getValue());
+		//System.out.println(spinnerUp.getValue());
 		spinnerUp.setPrefWidth(75);
 
 		Spinner spinnerD = new Spinner();
@@ -152,17 +147,39 @@ public class SettingsScene {
 			@Override
 			public void handle(ActionEvent event) {
 				DirectoryChooser directoryChooser = new DirectoryChooser();
-				directoryChooser.setInitialDirectory(new File(userDirectoryString + "/Downloads"));
-				File selectedDirectory = directoryChooser.showDialog(null);
+				directoryChooser.setInitialDirectory(directory);
+				newDirectory = directoryChooser.showDialog(null);
 
-				if (selectedDirectory == null) {
-					DestTxt.setText("No Directory selected");
+				if (newDirectory == null) {
+					DestTxt.setText(directory.getAbsolutePath());
 				} else {
-					DestTxt.setText(selectedDirectory.getAbsolutePath());
+					DestTxt.setText(newDirectory.getAbsolutePath());
 				}
 			}
 		});
-
+		
+		Button saveButton = new Button("Save");
+		saveButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				directory = newDirectory;
+				getScene().getWindow().hide();
+				
+			}
+			
+		});
+		
+		Button cancelButton = new Button("Cancel");
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				newDirectory = directory;
+				DestTxt.setText(directory.getAbsolutePath());
+				getScene().getWindow().hide();
+			}
+			
+		});
+		
 		// add each node respectively
 		hBox.getChildren().add(Destination);
 		hBox.getChildren().addAll(DestTxt, btnOpenDirectoryChooser);
@@ -180,10 +197,16 @@ public class SettingsScene {
 		root.getChildren().add(limitChoices);
 		root.getChildren().add(limitChoices1);
 		root.getChildren().add(schedulerBox);
-
+		
+		HBox buttonBox = new HBox();
+		buttonBox.getChildren().add(saveButton);
+		buttonBox.getChildren().add(cancelButton);
+		root.getChildren().add(buttonBox);
 	}
-
 	public Scene getScene() {
 		return this.scene;
+	}
+	public String getDirectory() {
+		return directory.getAbsolutePath();
 	}
 }

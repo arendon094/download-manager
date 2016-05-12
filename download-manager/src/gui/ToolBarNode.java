@@ -11,9 +11,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class ToolBarNode extends ToolBar{
-	
+	private DatabaseTable dbTable;
 	public ToolBarNode() {
 		createBar();
+		DatabaseTable dbTable;
 	}
 	
 	private ToolBar createBar() {
@@ -86,6 +87,10 @@ public class ToolBarNode extends ToolBar{
 		mglass.setTooltip(new Tooltip("Search"));
 		mglass.setGraphic(new ImageView(mGlassImage));
 		mglass.getStyleClass().add("button-icon");
+		
+		mglass.setOnAction((event) -> {
+			dbTable.updateFilter(searchField.getText());
+		});
 
 		// Moves position of both search field and button by 650 to the right
 		searchField.setTranslateX(450);
@@ -95,5 +100,8 @@ public class ToolBarNode extends ToolBar{
 		searchField.setAlignment(Pos.CENTER_RIGHT);
         
         this.getItems().addAll(searchField, mglass);
+	}
+	public void setDatabaseTable(DatabaseTable dbTable) {
+		this.dbTable = dbTable;
 	}
 }

@@ -10,7 +10,7 @@ import com.github.axet.wget.info.DownloadInfo.Part.States;
 import com.github.axet.wget.info.ex.DownloadMultipartError;
 
 public class Downloader implements Runnable {
-	
+	private String directory = System.getProperty("user.home") + "\\Downloads";
 	private String url;
 	
 	public Downloader() {
@@ -23,6 +23,14 @@ public class Downloader implements Runnable {
 	
 	public String getURL() {
 		return this.url;
+	}
+	
+	public void setDirectory(String directory) {
+		this.directory = directory;
+	}
+	
+	public String getDirectory() {
+		return this.directory;
 	}
 
     AtomicBoolean stop = new AtomicBoolean(false);
@@ -113,15 +121,14 @@ public class Downloader implements Runnable {
             // Choice target file or set download folder
             String filename = url.getPath();
             
-            String path = "/Users/mariahmartinez/Desktop/downloads/";
-            File f = new File(path + filename);
+            File f = new File(directory + filename);
             int version = 1;
             String versionFileName = url.getFile().substring(0, url.getPath().length() - 4);
             String newFilename = versionFileName;
 
             while (f.exists()) {
                 newFilename= versionFileName + "(" + version + ")";
-                f = new File("/Users/mariahmartinez/Desktop/downloads/" + newFilename + ".tif");
+                f = new File(directory + newFilename + ".tif");
                 version++;
             }
               

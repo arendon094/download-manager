@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import com.thoughtworks.xstream.XStream;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -22,7 +22,10 @@ import com.github.axet.wget.Downloader;
 
 public class DatabaseTable extends VBox {
 	private Downloader downloader;
-	
+	private TableView<DownloadableFile> dbTable;
+	private ObservableList<DownloadableFile> data;
+	private ObservableList<DownloadableFile> filteredData;
+	private MenuBarNode menuBar;
 	public DatabaseTable(Downloader downloader) throws Exception {
 		this.downloader = downloader;
 		createTable();
@@ -32,9 +35,9 @@ public class DatabaseTable extends VBox {
 		// Need to add type to tableview once we create
 		// class for data
 		
-		ObservableList<DownloadableFile> data = FXCollections.observableArrayList();
-
-		TableView<DownloadableFile> dbTable = new TableView<DownloadableFile>();
+		data = FXCollections.observableArrayList();
+		filteredData = FXCollections.observableArrayList();
+		dbTable = new TableView<DownloadableFile>();
 
 		TableColumn database = new TableColumn("JPL");
 
@@ -69,6 +72,7 @@ public class DatabaseTable extends VBox {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		            DownloadableFile rowData = row.getItem();
 		            downloader.setURL(rowData.getName());
+		            downloader.setDirectory(menuBar.getDirectory());
 		            Thread t1 = new Thread(downloader);
 		            t1.start();
 		            //download.run()
@@ -110,5 +114,33 @@ public class DatabaseTable extends VBox {
 
 	private void dumpData(ListBucketResult results) {
 
+	}
+	public void updateFilter(String input) {
+		filteredData.clear();
+		for(DownloadableFile file : data) {
+			if(matches(file, input)) {
+				filteredData.add(file);
+			}
+		}
+		ArrayList<TableColumn<DownloadableFile, ?>> order = new ArrayList<>(dbTable.getSortOrder());
+        dbTable.getSortOrder().clear();
+        dbTable.getSortOrder().addAll(order);
+		dbTable.setItems(filteredData);
+	}
+	private Boolean matches(DownloadableFile file, String input) {
+		String lowerCaseFilter = input.toLowerCase();
+		if(input == null || input.isEmpty()) {
+			return true;
+		}	
+		if (file.getName().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+			return true;
+		}
+		else if (file.getSize().toLowerCase().indexOf(lowerCaseFilter) != -1) {
+			return true;
+		}
+		return false;
+	}
+	public void setMenuBar(MenuBarNode menuBar) {
+		this.menuBar = menuBar;
 	}
 }

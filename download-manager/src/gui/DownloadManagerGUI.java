@@ -19,7 +19,7 @@ public class DownloadManagerGUI extends Application {
 	private ReadOnlyDoubleProperty sceneHeight;
 	private ReadOnlyDoubleProperty sceneWidth;
 	private ReadOnlyDoubleProperty paneWidth;
-
+	private String directory;
 	public void start(Stage primaryStage) throws Exception {
 
 		BorderPane borderPane = new BorderPane();
@@ -49,12 +49,11 @@ public class DownloadManagerGUI extends Application {
 
 		// Add the items to the topPane
 		topPane.getChildren().addAll(menu, new Separator(), toolBar, new Separator());
-
 		// Set top pane to the borderPane layout
 		borderPane.setTop(topPane);
 
 		// Set center pane to table views
-		borderPane.setCenter(createCenter());
+		borderPane.setCenter(createCenter(toolBar, menu));
 		
 		// Items in the bottom pane - Item description
 		VBox bottomPane = new VBox();
@@ -86,7 +85,7 @@ public class DownloadManagerGUI extends Application {
 
 	}
 
-	public HBox createCenter() throws Exception {
+	public HBox createCenter(ToolBarNode toolBar, MenuBarNode menuBar) throws Exception {
 		HBox center = new HBox();
 		center.prefWidthProperty().bind(paneWidth);	
 		
@@ -94,7 +93,10 @@ public class DownloadManagerGUI extends Application {
 		
 		DatabaseTable database = new DatabaseTable(downloader);
 		database.prefWidthProperty().bind(paneWidth.divide(2));
-
+		
+		toolBar.setDatabaseTable(database);
+		database.setMenuBar(menuBar);
+		
 		// Create downloads table
 		DownloadsTable downloads = new DownloadsTable(downloader);
 		downloads.createTable();

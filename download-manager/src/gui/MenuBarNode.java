@@ -12,8 +12,12 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 
 public class MenuBarNode extends MenuBar {
-		
+	private String directory;
+	private DatabaseTable dbTable;
+	SettingsScene settingsScene;
+	
 	public MenuBarNode() {
+		settingsScene = new SettingsScene();
 		createMenu();
 	}
 	
@@ -33,12 +37,10 @@ public class MenuBarNode extends MenuBar {
 		
 		settings.setOnAction(new EventHandler<ActionEvent>(){		
 			@Override public void handle(ActionEvent e) {
-				SettingsScene settingsScene = new SettingsScene();
 				PopUp settingsStage = new PopUp("Settings", settingsScene.getScene());
 				settingsStage.show();
 			}
 		});
-		
 		menuFile.getItems().addAll(settings);
 		this.getMenus().addAll(menuFile);
 		
@@ -100,5 +102,11 @@ public class MenuBarNode extends MenuBar {
 		menuUsers.getItems().addAll(login, profile);
 		this.getMenus().addAll(menuUsers);
 		
+	}
+	public void setDatabaseTable(DatabaseTable dbTable) { 
+		this.dbTable = dbTable;
+	}
+	public String getDirectory() {
+		return settingsScene.getDirectory();
 	}
 }
