@@ -1,6 +1,9 @@
 package gui;
 
 import java.io.File;
+
+import com.github.axet.wget.Downloader;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -24,10 +27,12 @@ public class SettingsScene {
 	private Scene scene;
 	private File newDirectory;
 	private File directory;
+	Downloader downloader;
 	
-	public SettingsScene() {
-		directory = new File(System.getProperty("user.home") + "\\Downloads");
+	public SettingsScene(Downloader downloader) {
+		directory = new File(System.getProperty("user.home") + "/Downloads");
 		newDirectory = directory;
+		this.downloader = downloader;
 		createScene();
 		addActions(this.scene);
 	}
@@ -163,6 +168,7 @@ public class SettingsScene {
 			@Override
 			public void handle(ActionEvent event) {
 				directory = newDirectory;
+				downloader.setDirectory(newDirectory.getAbsolutePath());
 				getScene().getWindow().hide();
 				
 			}

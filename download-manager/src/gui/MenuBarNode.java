@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
 
+import com.github.axet.wget.Downloader;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -15,12 +17,17 @@ public class MenuBarNode extends MenuBar {
 	private String directory;
 	private DatabaseTable dbTable;
 	SettingsScene settingsScene;
+	private User user;
+	private Downloader downloader;
 	
-	public MenuBarNode() {
-		settingsScene = new SettingsScene();
+	public MenuBarNode(User user, Downloader downloader) {
+		this.downloader = downloader;
+		this.user = user;
+		settingsScene = new SettingsScene(downloader);
 		createMenu();
 	}
-	
+
+
 	private MenuBar createMenu() {
 		
 		addFileMenu();
@@ -83,7 +90,7 @@ public class MenuBarNode extends MenuBar {
 		
 		login.setOnAction(new EventHandler<ActionEvent>(){		
 			@Override public void handle(ActionEvent e) {
-				LoginScene loginScene = new LoginScene("login");
+				LoginScene loginScene = new LoginScene("login", user);
 				PopUp loginStage = new PopUp("Login", loginScene.getScene());
 				loginStage.show();
 				
@@ -92,7 +99,7 @@ public class MenuBarNode extends MenuBar {
 		
 		profile.setOnAction(new EventHandler<ActionEvent>(){		
 			@Override public void handle(ActionEvent e) {
-				LoginScene profileScene = new LoginScene("profile");
+				LoginScene profileScene = new LoginScene("profile", user);
 				PopUp profileStage = new PopUp("Profile", profileScene.getScene());
 				profileStage.show();
 				

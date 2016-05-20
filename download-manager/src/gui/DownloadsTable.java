@@ -117,12 +117,20 @@ public class DownloadsTable extends VBox{
 		
 		ArrayList<File> allMatching = new ArrayList();	
 		
+		// not working correctly with multiple identical files
 		for (File file : dir) {
 			if (file.getName().substring(0, file.getName().length() - 4).contains(name.substring(0, name.length() - 4))) {
 				allMatching.add(file);
-				System.out.println(file.getName());
 			}
 		}
 		return String.valueOf(allMatching.get(allMatching.size() - 1).length() / 1024);
+	}
+
+	public void deleteSelected() {
+		DownloadingFile file = downloadsTable.getSelectionModel().getSelectedItem();
+		File deleteFile = new File(downloader.getDirectory() + "/" + file.getName());
+		System.out.println(deleteFile.getAbsolutePath());
+		deleteFile.delete();
+		
 	}
 }

@@ -1,7 +1,14 @@
 package gui;
 
-import com.github.axet.wget.Downloader;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.github.axet.wget.Downloader;
+import com.github.axet.wget.info.DownloadInfo;
+import com.github.axet.wget.info.URLInfo;
+import com.github.axet.wget.info.URLInfo.States;
+
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -12,7 +19,13 @@ import javafx.scene.image.ImageView;
 
 public class ToolBarNode extends ToolBar{
 	private DatabaseTable dbTable;
-	public ToolBarNode() {
+	private Downloader downloader;
+	AtomicBoolean stopAtomic = new AtomicBoolean(false);
+	private DownloadsTable table;
+	
+	public ToolBarNode(Downloader downloader) {
+		this.downloader = downloader;
+
 		createBar();
 		DatabaseTable dbTable;
 	}
@@ -59,6 +72,12 @@ public class ToolBarNode extends ToolBar{
 		stop.setGraphic(new ImageView(stopImage));
 		stop.getStyleClass().add("button-icon");
 		
+		stop.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	table.deleteSelected();
+		    }
+		});
+		
 		Button up = new Button();
 		up.setTooltip(new Tooltip("up"));
 		up.setGraphic(new ImageView(upImage));
@@ -101,7 +120,12 @@ public class ToolBarNode extends ToolBar{
         
         this.getItems().addAll(searchField, mglass);
 	}
+	
 	public void setDatabaseTable(DatabaseTable dbTable) {
 		this.dbTable = dbTable;
+	}
+
+	public void setTable(DownloadsTable table) {
+		this.table = table;
 	}
 }

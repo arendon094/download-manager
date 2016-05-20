@@ -19,8 +19,14 @@ public class DownloadManagerGUI extends Application {
 	private ReadOnlyDoubleProperty sceneHeight;
 	private ReadOnlyDoubleProperty sceneWidth;
 	private ReadOnlyDoubleProperty paneWidth;
-	private String directory;
+	Downloader downloader;
+	private User user;
+	private ToolBarNode toolBar;
+	
 	public void start(Stage primaryStage) throws Exception {
+		
+		downloader = new Downloader();
+		user = new User("jdoe", "password", "jdoe@calstatela.edu", "John Doe");
 
 		BorderPane borderPane = new BorderPane();
 		
@@ -42,10 +48,10 @@ public class DownloadManagerGUI extends Application {
 		// For Items on the topPane of Border Pane
 		VBox topPane = new VBox();
 
-		MenuBarNode menu = new MenuBarNode();
+		MenuBarNode menu = new MenuBarNode(user, downloader);
 		menu.getStyleClass().add("background");
 
-		ToolBarNode toolBar = new ToolBarNode();
+		toolBar = new ToolBarNode(downloader);
 
 		// Add the items to the topPane
 		topPane.getChildren().addAll(menu, new Separator(), toolBar, new Separator());
@@ -89,8 +95,6 @@ public class DownloadManagerGUI extends Application {
 		HBox center = new HBox();
 		center.prefWidthProperty().bind(paneWidth);	
 		
-		Downloader downloader = new Downloader();
-		
 		DatabaseTable database = new DatabaseTable(downloader);
 		database.prefWidthProperty().bind(paneWidth.divide(2));
 		
@@ -101,6 +105,7 @@ public class DownloadManagerGUI extends Application {
 		DownloadsTable downloads = new DownloadsTable(downloader);
 		downloads.createTable();
 		downloads.prefWidthProperty().bind(paneWidth.divide(2));
+		this.toolBar.setTable(downloads);
 
 		center.getChildren().addAll(database, downloads);
 		return center;

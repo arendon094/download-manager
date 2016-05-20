@@ -75,7 +75,6 @@ public class DatabaseTable extends VBox {
 		            downloader.setDirectory(menuBar.getDirectory());
 		            Thread t1 = new Thread(downloader);
 		            t1.start();
-		            //download.run()
 		        }
 		    });
 		    return row ;

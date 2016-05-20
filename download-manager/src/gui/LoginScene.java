@@ -17,8 +17,11 @@ import javafx.scene.text.Text;
 public class LoginScene {
 	
 	private Scene scene;
+	private User user;
+	private boolean loggedIn = false;
 	
-	public LoginScene(String type) {
+	public LoginScene(String type, User user) {
+		this.user = user;
 		if(type == "login") {
 			createScene();
 		}
@@ -70,11 +73,26 @@ public class LoginScene {
         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				//userTextField.getText();
-				//pwBox.getText();
-				//username and pass authentication
-				actiontarget.setFill(Color.FIREBRICK);
-		        actiontarget.setText("Wrong username or pass.");
+				if (!loggedIn && userTextField.getText().equals(user.getUsername()) && pwBox.getText().equals(user.getPassword())) {
+					loggedIn = true;
+					actiontarget.setFill(Color.GREEN);
+					actiontarget.setText("Welcome, " + user.getUsername());
+					loginBtn.setText("Logout");
+					userTextField.setDisable(true);
+					userTextField.setText("");
+					pwBox.setDisable(true);
+					pwBox.setText("");
+				} else if(loggedIn){
+					loggedIn = false;
+					actiontarget.setFill(Color.GREEN);
+					actiontarget.setText("You are now logged out.");
+					loginBtn.setText("Login");
+					userTextField.setDisable(false);
+					pwBox.setDisable(false);
+				} else {
+					actiontarget.setFill(Color.FIREBRICK);
+					actiontarget.setText("Wrong username or pass.");
+				}
 			}
         });
         
@@ -109,7 +127,7 @@ public class LoginScene {
         
         Text userName = new Text();
         //get username
-        userName.setText("Bobs123");
+        userName.setText(user.getUsername());
         userName.setFill(Color.WHITE);
         grid.add(userName, 1, 0);
         
@@ -119,7 +137,7 @@ public class LoginScene {
         Text name = new Text();
         name.setFill(Color.WHITE);
         //get name
-        name.setText("Bob Smith");
+        name.setText(user.getName());
         grid.add(name, 1, 1);
         
         Label passwordLabel = new Label("Password:");
@@ -136,7 +154,7 @@ public class LoginScene {
         
         Text email = new Text();
       //get email
-        email.setText("Bobs321@email.com");
+        email.setText(user.getEmail());
         email.setFill(Color.WHITE);
         grid.add(email, 1, 3);
         
@@ -146,7 +164,7 @@ public class LoginScene {
         editBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				LoginScene editScene = new LoginScene("edit");
+				LoginScene editScene = new LoginScene("edit", user);
 				PopUp editStage = new PopUp("Edit Profile", editScene.getScene());
 				editStage.show();
 			}
@@ -181,7 +199,7 @@ public class LoginScene {
         Label nameLabel = new Label("Name:");
         grid.add(nameLabel, 0, 1);
         
-        TextField nameTextField = new TextField();
+        TextField nameTextField = new TextField(user.getName());
         grid.add(nameTextField, 1, 1);
         
         Label passwordLabel = new Label("Password:");
@@ -199,7 +217,7 @@ public class LoginScene {
         Label emailLabel = new Label("Email:");
         grid.add(emailLabel, 0, 4);
         
-        TextField emailField = new TextField();
+        TextField emailField = new TextField(user.getEmail());
         grid.add(emailField, 1, 4);
         
         Label reEmailLabel = new Label("Re-enter Email:");
@@ -230,9 +248,13 @@ public class LoginScene {
 				}
 				else {
 					//save changes to account
-					//nameTextField.getText();
-					//pwField.getText();
-					//emailField.getText();
+					user.setEmail(emailField.getText());
+					user.setName(nameTextField.getText());
+					user.setPassword(pwField.getText());
+					actiontarget.setFill(Color.GREEN);
+			        actiontarget.setText("Profile Updated");
+			        nameTextField.setText(user.getName());
+			        emailField.setText(user.getEmail());
 				}
 			}
         });
