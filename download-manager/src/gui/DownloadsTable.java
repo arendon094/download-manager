@@ -63,28 +63,7 @@ public class DownloadsTable extends VBox{
 		TableColumn<DownloadingFile,String>  size = new TableColumn<>("size");
 		TableColumn<DownloadingFile,String>  status = new TableColumn<>("Status");
 		TableColumn<DownloadingFile,String> speed = new TableColumn<>("speed");
-		/*
-		speed.setCellFactory(new Callback<TableColumn<DownloadingFile, String>, TableCell<DownloadingFile, String>>(){
-			
-			@Override
-			public TableCell<DownloadingFile, String> call(
-					TableColumn<DownloadingFile, String> param) {
-				final TableCell cell = new TableCell<DownloadingFile, String>() {
-				@Override
-				protected void updateItem(String t, boolean bln) {
-					super.updateItem(t, bln);
-					if(bln){
-						setText(null);
-					} else {
-						setText(t);
-					}
-				}
-				};
-				return null;
-			}
-			
-		});
-		*/
+
 		//Everytime the cell value is for speed item in DownloadingFile update table
 		speed.setCellValueFactory(new PropertyValueFactory<DownloadingFile, String>("speed"));
 		//Set text 
