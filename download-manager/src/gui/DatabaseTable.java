@@ -6,10 +6,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.thoughtworks.xstream.XStream;
+
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -26,8 +31,12 @@ public class DatabaseTable extends VBox {
 	private ObservableList<DownloadableFile> data;
 	private ObservableList<DownloadableFile> filteredData;
 	private MenuBarNode menuBar;
+	private ObservableMap<DownloadingFile,Thread> threadMap;
+	
 	public DatabaseTable(Downloader downloader) throws Exception {
 		this.downloader = downloader;
+		Map<DownloadingFile,Thread> threadTMap= new HashMap<DownloadingFile,Thread>();
+		this.threadMap = FXCollections.observableMap(threadTMap);
 		createTable();
 	}
 
@@ -71,9 +80,12 @@ public class DatabaseTable extends VBox {
 		    row.setOnMouseClicked(event -> {
 		        if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
 		            DownloadableFile rowData = row.getItem();
-		            downloader.setURL(rowData.getName());
-		            downloader.setDirectory(menuBar.getDirectory());
-		            Thread t1 = new Thread(downloader);
+		            Downloader tempDownloader = new Downloader();
+		            tempDownloader.setURL(rowData.getName());
+		            tempDownloader.setDirectory(menuBar.getDirectory());
+		            Thread t1 = new Thread(tempDownloader);
+		            //Try this first to see if this will work.
+		            this.threadMap.put(new DownloadingFile(rowData.getName(),null,rowData.getSize(), tempDownloader), t1);
 		            t1.start();
 		        }
 		    });
@@ -114,6 +126,7 @@ public class DatabaseTable extends VBox {
 	private void dumpData(ListBucketResult results) {
 
 	}
+	
 	public void updateFilter(String input) {
 		filteredData.clear();
 		for(DownloadableFile file : data) {
@@ -126,6 +139,7 @@ public class DatabaseTable extends VBox {
         dbTable.getSortOrder().addAll(order);
 		dbTable.setItems(filteredData);
 	}
+	
 	private Boolean matches(DownloadableFile file, String input) {
 		String lowerCaseFilter = input.toLowerCase();
 		if(input == null || input.isEmpty()) {
@@ -139,7 +153,12 @@ public class DatabaseTable extends VBox {
 		}
 		return false;
 	}
+	
 	public void setMenuBar(MenuBarNode menuBar) {
 		this.menuBar = menuBar;
+	}
+	
+	public ObservableMap<DownloadingFile, Thread> getThreadMap(){
+		return this.threadMap;
 	}
 }

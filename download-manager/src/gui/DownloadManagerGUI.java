@@ -102,7 +102,7 @@ public class DownloadManagerGUI extends Application {
 		database.setMenuBar(menuBar);
 		
 		// Create downloads table
-		DownloadsTable downloads = new DownloadsTable(downloader);
+		DownloadsTable downloads = new DownloadsTable(downloader, database);
 		downloads.createTable();
 		downloads.prefWidthProperty().bind(paneWidth.divide(2));
 		this.toolBar.setTable(downloads);
