@@ -55,9 +55,6 @@ public class ToolBarNode extends ToolBar{
 		resume.setTooltip(new Tooltip("Resume"));
 		resume.setGraphic(new ImageView(resumeImage));
 		resume.getStyleClass().add("button-icon");
-		resume.setOnAction((event) -> {
-			table.resumetItem();
-		});
 		
 //		resume.setOnAction((event) -> {
 //			Downloader downloader = new Downloader();
@@ -69,9 +66,6 @@ public class ToolBarNode extends ToolBar{
 		pause.setTooltip(new Tooltip("Pause"));
 		pause.setGraphic(new ImageView(pauseImage));
 		pause.getStyleClass().add("button-icon");
-		pause.setOnAction((event) -> {
-			table.pauseItem();
-		});
 
 		Button stop = new Button();
 		stop.setTooltip(new Tooltip("Stop"));

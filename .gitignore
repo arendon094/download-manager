@@ -1,6 +1,4 @@
-.DS_Store
-.metadata/*
-bin/*
-download-manager/old_src/*
-download-manager/bin/*
+-/.DS_Store
+-/.meteadata/
+-/bin/
 *.class
