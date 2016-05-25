@@ -18,7 +18,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 public class DownloadInfo extends URLInfo {
 
     public final static long PART_LENGTH = 10 * 1024 * 1024;
-
+   
     @XStreamAlias("DownloadInfoPart")
     public static class Part {
         /**
