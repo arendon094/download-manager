@@ -19,12 +19,10 @@ import javafx.scene.image.ImageView;
 
 public class ToolBarNode extends ToolBar{
 	private DatabaseTable dbTable;
-	private Downloader downloader;
 	AtomicBoolean stopAtomic = new AtomicBoolean(false);
 	private DownloadsTable table;
 	
-	public ToolBarNode(Downloader downloader) {
-		this.downloader = downloader;
+	public ToolBarNode() {
 
 		createBar();
 		DatabaseTable dbTable;
@@ -78,12 +76,6 @@ public class ToolBarNode extends ToolBar{
 		stop.setGraphic(new ImageView(stopImage));
 		stop.getStyleClass().add("button-icon");
 		
-		stop.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override public void handle(ActionEvent e) {
-		    	table.deleteSelected();
-		    }
-		});
-		
 		Button up = new Button();
 		up.setTooltip(new Tooltip("up"));
 		up.setGraphic(new ImageView(upImage));
@@ -98,6 +90,12 @@ public class ToolBarNode extends ToolBar{
 		delete.setTooltip(new Tooltip("delete"));
 		delete.setGraphic(new ImageView(deleteImage));
 		delete.getStyleClass().add("button-icon");
+		
+		delete.setOnAction(new EventHandler<ActionEvent>() {
+		    @Override public void handle(ActionEvent e) {
+		    	table.deleteSelected();
+		    }
+		});
 
 		this.getItems().addAll(resume, pause, stop, up, down, delete);
 	}

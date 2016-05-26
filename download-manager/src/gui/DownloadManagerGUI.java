@@ -22,6 +22,7 @@ public class DownloadManagerGUI extends Application {
 	Downloader downloader;
 	private User user;
 	private ToolBarNode toolBar;
+	private SummaryNode summary;
 	
 	public void start(Stage primaryStage) throws Exception {
 		
@@ -51,32 +52,23 @@ public class DownloadManagerGUI extends Application {
 		MenuBarNode menu = new MenuBarNode(user, downloader);
 		menu.getStyleClass().add("background");
 
-		toolBar = new ToolBarNode(downloader);
+		toolBar = new ToolBarNode();
 
 		// Add the items to the topPane
 		topPane.getChildren().addAll(menu, new Separator(), toolBar, new Separator());
 		// Set top pane to the borderPane layout
 		borderPane.setTop(topPane);
-
+		summary = new SummaryNode();
+		
 		// Set center pane to table views
 		borderPane.setCenter(createCenter(toolBar, menu));
 		
 		// Items in the bottom pane - Item description
 		VBox bottomPane = new VBox();
 		bottomPane.setSpacing(10);
-
-		SummaryNode summary = new SummaryNode();
-		
-		Text t = new Text(10, 50, "No image selected");
-		VBox v = new VBox(t);
-		t.getStyleClass().add("background");
-		t.setFill(Color.WHITE);
-		v.setAlignment(Pos.CENTER);
-		v.setPrefHeight(300);
-	
 		
 		// Add item to the bottomPane
-		bottomPane.getChildren().addAll(new Separator(), v);
+		bottomPane.getChildren().addAll(new Separator(), summary);
 		
 
 		// Set bottom pane to the borderPane layout
@@ -95,7 +87,7 @@ public class DownloadManagerGUI extends Application {
 		HBox center = new HBox();
 		center.prefWidthProperty().bind(paneWidth);	
 		
-		DatabaseTable database = new DatabaseTable(downloader);
+		DatabaseTable database = new DatabaseTable(summary);
 		database.prefWidthProperty().bind(paneWidth.divide(2));
 		
 		toolBar.setDatabaseTable(database);

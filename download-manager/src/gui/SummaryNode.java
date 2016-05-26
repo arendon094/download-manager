@@ -1,5 +1,14 @@
 package gui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
+import com.github.axet.wget.Downloader;
+
+import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -11,118 +20,195 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class SummaryNode extends GridPane {
-	
-	private String randDescription = "a large, bowl-shaped cavity in the ground";
-	
+public class SummaryNode extends HBox {
+
+	private ImageView craters;
+	private Button resumeBtn;
+	private VBox box;
+	private HBox controlBox;
+
 	public SummaryNode(){
-		createSummary();
+		resumeBtn = new Button();
+		box = new VBox();
+		createBlankSummary();
 	}
-	
-	private GridPane createSummary(){ // grid will be 6 rows by 5 columns
-		this.setHgap(50); // Horizontal padding on grid
-		this.setVgap(5); // vertical padding on grid
+
+	private void createBlankSummary() {
+		//		this.setHgap(50); // Horizontal padding on grid
+		//		this.setVgap(5); // vertical padding on grid
 		this.setPadding(new Insets(25, 125, 25, 125)); // padding on all 4 sides of grid
 		this.setAlignment(Pos.CENTER);
-		
+
+		Text t = new Text(10, 50, "No image selected");
+		controlBox = new HBox();
+		controlBox.setSpacing(10);
+		box.setSpacing(10);
+		box.getChildren().add(t);
+		t.getStyleClass().add("background");
+		t.setFill(Color.WHITE);
+		box.setAlignment(Pos.CENTER);
+		box.setPrefHeight(300);
+
+		//		this.add(v, 1, 5);
+		this.getChildren().add(box);
+
+	}
+
+	private void createSummary(String filename, String desc, Image image){ // grid will be 6 rows by 5 columns
+		//		this.setHgap(50); // Horizontal padding on grid
+		//		this.setVgap(5); // vertical padding on grid
+		//		this.setPadding(new Insets(25, 125, 25, 125)); // padding on all 4 sides of grid
+		//		this.setAlignment(Pos.CENTER);
+
 		// image in rows 1-6 columns 1-2
-		Image img = new Image("images/craters.jpg");
-		ImageView craters = new ImageView(img);
-		this.add(craters, 0, 0, 2, 6);
-		
+		this.getChildren().clear();
+		this.box.getChildren().clear();
+		this.controlBox.getChildren().clear();
+		this.setSpacing(50);
+		this.setAlignment(Pos.CENTER);
+		this.box.setAlignment(Pos.CENTER_LEFT);
+
+		Image img = new Image("images/default.png");
+		craters = new ImageView(img);
+		craters.setFitHeight(100);
+		craters.setFitWidth(100);
+		craters.preserveRatioProperty();
+
+		//		this.add(craters, 0, 0, 2, 6);
+
 		// label in row 1 columns 3-4
 		String nameLabel = "File Name: ";
-		Label fileName = new Label(nameLabel + "<Name>");
-		this.add(fileName, 2, 0, 2, 1);
-		
+		Text fileName = new Text(nameLabel + filename);
+		fileName.setFill(Color.WHITE);
+		//				this.add(fileName, 2, 0, 2, 1);
+		this.box.getChildren().add(fileName);
+
 		// link in row 2 columns 1-3
 		Hyperlink link = new Hyperlink();
-		link.setText("<The link to the original>");
+		link.setText("View on LMMP Website");
 		link.setOnAction(new EventHandler<ActionEvent>() {
-		    @Override
-		    public void handle(ActionEvent e) {
-		        // Action for when link is clicked
-		    }
+			@Override
+			public void handle(ActionEvent e) {
+				// Action for when link is clicked
+			}
 		});
-		this.add(link, 4, 0);
+		//		this.add(link, 4, 0);
+		this.box.getChildren().add(link);
 
+		// description of image row 3 columns 3-5
+		Text description = new Text("Description: " + desc);
+		description.setFill(Color.WHITE);
+		description.setTextAlignment(TextAlignment.CENTER);
+		//        this.add(description, 2, 2, 3, 1);
+		this.box.getChildren().add(description);
+
+		// size of image row 4 column 3
+		String sizeLabel = "Size: ";
+		Text fileSize = new Text(sizeLabel + "722 MB");
+		fileSize.setFill(Color.WHITE);
+		//        this.add(fileSize, 2, 3);
+		this.box.getChildren().add(fileSize);
+
+
+		// label start time row 5 column 3
+		String startLabel = "Start Time: ";
+		Text start = new Text(startLabel + "12:32 PM");
+		//        this.add(start, 2, 4);
+		start.setFill(Color.WHITE);
+
+		// label finish time row 6 column 3
+		String finishLabel = "Download Finish: ";
+		Text finish = new Text(finishLabel + "--");
+		finish.setFill(Color.WHITE);
+		//        this.add(finish, 2, 5);
+
+		// progress indicator row 5 column 4
+		Text progressLabel = new Text("Progress: ");
+		progressLabel.setFill(Color.WHITE);
+		//        this.add(progressLabel, 3, 4);
+
+		// progress indicator row 5 column 5
+		ProgressBar pIndicator = new ProgressBar(0.0);
+		//        this.add(pIndicator, 4, 4);
+		HBox progress = new HBox(progressLabel, pIndicator);
+		progress.setSpacing(15);
+		this.box.getChildren().add(progress);
+
+		// label time remaining row 6 columns 4-5
+		String timeLabel = "Time Remaining: ";
+		Text timeRem = new Text(timeLabel + "0 hours 57 minutes");
+		timeRem.setFill(Color.WHITE);
+		//		this.add(timeRem, 3, 5, 2, 1);
+
+		this.getChildren().addAll(craters, box);
 		// resume download button row 2 column 3
-		Button resumeBtn = new Button();
-        resumeBtn.setText("Resume Download");
-        resumeBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				// button action goes here
-			}
-        });
-        this.add(resumeBtn, 2, 1);
-		
+		resumeBtn = new Button();
+		resumeBtn.setText("Download");
+		//        this.add(resumeBtn, 2, 1);
+
 		// paused download button row 2 column 4
-        Button pauseBtn = new Button();
-        pauseBtn.setText("Pause Download");
-        pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
+		Button pauseBtn = new Button();
+		pauseBtn.setText("Pause Download");
+		pauseBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				// button action goes here
 			}
-        });
-        this.add(pauseBtn, 3, 1);
-		
+		});
+		//        this.add(pauseBtn, 3, 1);
+
 		// remove download button row 2 column 4
-        Button removeBtn = new Button();
-        removeBtn.setText("Remove Download");
-        removeBtn.setOnAction(new EventHandler<ActionEvent>() {
+		Button removeBtn = new Button();
+		removeBtn.setText("Remove Download");
+		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				// button action goes here
 			}
-        });
-        this.add(removeBtn, 4, 1);
-        
-        // description of image row 3 columns 3-5
-        Text description = new Text("Description: " + randDescription);
-        description.setFill(Color.WHITE);
-        description.setTextAlignment(TextAlignment.CENTER);
-        this.add(description, 2, 2, 3, 1);
-        
-        // size of image row 4 column 3
-        String sizeLabel = "Size: ";
-        Text fileSize = new Text(sizeLabel + "722 MB");
-        fileSize.setFill(Color.WHITE);
-        this.add(fileSize, 2, 3);
-        
-        // label start time row 5 column 3
-        String startLabel = "Start Time: ";
-        Text start = new Text(startLabel + "12:32 PM");
-        this.add(start, 2, 4);
-        start.setFill(Color.WHITE);
-        
-        // label finish time row 6 column 3
-        String finishLabel = "Download Finish: ";
-        Text finish = new Text(finishLabel + "--");
-        finish.setFill(Color.WHITE);
-        this.add(finish, 2, 5);
-        
-        // progress indicator row 5 column 4
-        Label progressLabel = new Label("Progress: ");
-        this.add(progressLabel, 3, 4);
-        
-     // progress indicator row 5 column 5
-        ProgressIndicator pIndicator = new ProgressIndicator(0.6);
-        this.add(pIndicator, 4, 4);
-        
-        // label time remaining row 6 columns 4-5
-        String timeLabel = "Time Remaining: ";
-        Text timeRem = new Text(timeLabel + "0 hours 57 minutes");
-        timeRem.setFill(Color.WHITE);
-        this.add(timeRem, 3, 5, 2, 1);
-		
-		return this;
+		});
+		//        this.add(removeBtn, 4, 1);
+		this.controlBox.getChildren().addAll(resumeBtn, pauseBtn, removeBtn);
+		this.box.getChildren().add(controlBox);
 	}
-	
+
+	public void showSummary(DownloadableFile file) {
+		String description = file.getName().replace(".tif", "");
+		this.createSummary(file.getName(), description, file.getImage());
+	}
+
+	public void updateImage(File file) {
+		Image image;
+		//		System.out.println(file.getAbsolutePath());
+		//		System.out.println(file.exists());
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(file);
+			image = SwingFXUtils.toFXImage(img, null);
+			craters = new ImageView(image);
+			craters.setFitHeight(300);
+			craters.setFitWidth(200);
+			craters.preserveRatioProperty();
+		} catch (IOException e) {
+			image = new Image("images/default.png");
+			craters.setFitHeight(200);
+			craters.setFitWidth(200);
+			System.out.println("Image failed to load.");
+		}
+
+		//		this.add(craters, 0, 0, 2, 6);
+		this.getChildren().set(0, craters);
+	}
+
+	public Button getDownloadButton() {
+		return this.resumeBtn;
+	}
 }

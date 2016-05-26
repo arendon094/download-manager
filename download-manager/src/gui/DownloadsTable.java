@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
@@ -61,7 +62,7 @@ public class DownloadsTable extends VBox{
 		
 		TableColumn<DownloadingFile,String>  fileName = new TableColumn<>("File Name");
 		TableColumn<DownloadingFile,String>  size = new TableColumn<>("size");
-		TableColumn<DownloadingFile,String>  status = new TableColumn<>("Status");
+		TableColumn<DownloadingFile,Double>  status = new TableColumn<>("status");
 		TableColumn<DownloadingFile,String> speed = new TableColumn<>("speed");
 
 		//Everytime the cell value is for speed item in DownloadingFile update table
@@ -69,14 +70,23 @@ public class DownloadsTable extends VBox{
 		//Set text 
 		speed.setText("Speed");
 		
+		status.setCellValueFactory(new PropertyValueFactory<DownloadingFile, Double>("status"));
+		//Set text 
+		status.setText("Status");
+		
 		size.setCellValueFactory(new PropertyValueFactory<DownloadingFile, String>("size"));
-		size.setText("Size");
+		size.setText("Size (mb)");
 		
 		TableColumn remaining = new TableColumn("Time Remaining");
 		TableColumn created = new TableColumn("Created");
 		TableColumn encrypted = new TableColumn("Encrypted?");
+		TableColumn<DownloadingFile, Double> progressCol = new TableColumn("Progress");
+	    progressCol.setCellValueFactory(new PropertyValueFactory<DownloadingFile, Double>(
+	        "status"));
+	    progressCol.setCellFactory(ProgressBarTableCell.<DownloadingFile> forTableColumn());
+
 		
-		downloads.getColumns().addAll(fileName, size, status, speed, created, encrypted);
+		downloads.getColumns().addAll(fileName, size, progressCol, speed, created, encrypted);
 		downloadsTable.getColumns().addAll(downloads);
 		
 		this.setSpacing(5);
@@ -86,6 +96,8 @@ public class DownloadsTable extends VBox{
 		fileName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		size.setCellValueFactory(new PropertyValueFactory<>("size"));
 		speed.setCellValueFactory(new PropertyValueFactory<>("speed"));
+		status.setCellValueFactory(new PropertyValueFactory<>("status"));
+
 		
 	}
 	
@@ -137,6 +149,7 @@ public class DownloadsTable extends VBox{
 		File deleteFile = new File(downloader.getDirectory() + "/" + file.getName());
 		System.out.println(deleteFile.getAbsolutePath());
 		deleteFile.delete();
-		
+		downloadsTable.getItems().remove(file);
+		file.getDownloader().setStop();
 	}
 }

@@ -9,4 +9,7 @@ public class Contents {
  
  @XStreamAlias("Size") // 
  String fileSize;
+ 
+ @XStreamAlias("LastModified") // 
+ String createdAt;
 }

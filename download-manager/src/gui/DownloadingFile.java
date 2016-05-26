@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.github.axet.wget.Downloader;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class DownloadingFile {
@@ -13,12 +14,16 @@ public class DownloadingFile {
 	private SimpleStringProperty speed;
 	private SimpleStringProperty size;
 	private Downloader downloader;
+	private SimpleDoubleProperty status;
+	private double trueSize;
 	
-	public DownloadingFile(String name, String speed, String size, Downloader dl) {
+	public DownloadingFile(String name, String speed, String size, Downloader dl, Double status) {
 		this.name = new SimpleStringProperty(name);
 		this.size = new SimpleStringProperty(size);
 		this.speed = new SimpleStringProperty(speed);
+		this.status = new SimpleDoubleProperty(status);
 		this.downloader = dl;
+		this.trueSize = Double.parseDouble(size);
 		
 		if(this.downloader != null){
 			Runnable helloRunnable = new Runnable() {
@@ -39,14 +44,9 @@ public class DownloadingFile {
 	
 	private void refresh() {
 		this.speed.set(this.downloader.formatSpeed(this.downloader.getSpeedInfo().getCurrentSpeed()));
-		this.size.set(String.format("%.2f",this.downloader.getSize()/1048576.0));
+		this.size.set(String.format("%.2f",this.downloader.getSize()/1000000.0));
+		this.status.set((Double.parseDouble(this.size.getValue()) / this.trueSize));
 		this.name.set(this.downloader.getName());
-	}
-
-	public DownloadingFile(String name, String speed, String size) {
-		this.name = new SimpleStringProperty(name);
-		this.size = new SimpleStringProperty(size);
-		this.speed = new SimpleStringProperty(speed);
 	}
 	
 	public Downloader getDownloader(){
@@ -75,6 +75,10 @@ public class DownloadingFile {
 	
 	public SimpleStringProperty speedProperty(){
 		return this.speed;
+	}
+	
+	public SimpleDoubleProperty statusProperty(){
+		return this.status;
 	}
 
 	public void setName() {

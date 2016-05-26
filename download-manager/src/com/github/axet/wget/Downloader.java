@@ -16,39 +16,33 @@ public class Downloader implements Runnable {
 	private String url;
 	private Runnable notify;
 	private volatile boolean pause;
-	private boolean stopDownload;
 	private boolean first;
 	private File target;
 
 	public Downloader() {
 		this.pause = false;
 		this.first = true;
-		this.stopDownload = false;
 	}
-	
-	public String getName(){
-		if(target != null)
+
+	public String getName() {
+		if (target != null)
 			return target.getName();
 		else
 			return this.url;
 	}
-	
-	public void setStopDownload(boolean stopDL){
-		this.stopDownload = stopDL;
-	}
-	
-	public long getSize(){	
-		if(info != null)
+
+	public long getSize() {
+		if (info != null)
 			return info.getCount();
 		else
 			return 0;
 	}
-	
-	public void setPause(boolean pause){
+
+	public void setPause(boolean pause) {
 		this.pause = pause;
 	}
-	
-	public boolean getPause(){
+
+	public boolean getPause() {
 		return this.pause;
 	}
 
@@ -68,11 +62,14 @@ public class Downloader implements Runnable {
 		return this.directory;
 	}
 
+	public void setStop() {
+		stop.set(true);
+	}
+
 	AtomicBoolean stop = new AtomicBoolean(false);
 	DownloadInfo info;
 	long last;
 	SpeedInfo speedInfo = new SpeedInfo();
-	private boolean shutDown;
 
 	public SpeedInfo getSpeedInfo() {
 		return speedInfo;
@@ -81,6 +78,7 @@ public class Downloader implements Runnable {
 	public DownloadInfo info() {
 		return info;
 	}
+
 	public static String formatSpeed(long s) {
 		if (s > 0.1 * 1024 * 1024 * 1024) {
 			float f = s / 1024f / 1024f / 1024f;
@@ -97,62 +95,68 @@ public class Downloader implements Runnable {
 	public void run() {
 		try {
 			notify = new Runnable() {
-				private volatile boolean shutdown;
 				@Override
 				public void run() {
-						// notify app or save download state
-						// you can extract information from DownloadInfo info;
-						switch (info.getState()) {
-						case EXTRACTING:
-						case EXTRACTING_DONE:
-							System.out.println(info.getState());
-							break;
-						case DONE:
-							// finish speed calculation by adding remaining bytes speed
-							speedInfo.end(info.getCount());
-							// print speed
-							System.out.println(String.format("%s average speed (%s)", info.getState(), formatSpeed(speedInfo.getAverageSpeed())));
-							break;
-						case RETRYING:
-							System.out.println(info.getState() + " " + info.getDelay());
-							break;
-						case DOWNLOADING:
-							speedInfo.step(info.getCount());
-							long now = System.currentTimeMillis();
-							if (now - 1000 > last) {
-								last = now;
-
-								String parts = "";
-
-								for (Part p : info.getParts()) {
-									if (p.getState().equals(States.DOWNLOADING) && !this.shutdown) {
-										parts += String.format("Part#%d(%.2f) ", p.getNumber(),
-												p.getCount() / (float) p.getLength());
-									}
-								}
-
-								float p = info.getCount() / (float) info.getLength();
-
-								System.out.println(String.format("%.2f %s (%s / %s)", p, parts,
-										formatSpeed(speedInfo.getCurrentSpeed()),
-										formatSpeed(speedInfo.getAverageSpeed())));
-							}
+					// notify app or save download state
+					// you can extract information from DownloadInfo info;
+					switch (info.getState()) {
+					case EXTRACTING:
+					case EXTRACTING_DONE:
+						System.out.println(info.getState());
+						break;
+					case DONE:
+						// finish speed calculation by adding remaining bytes
+						// speed
+						speedInfo.end(info.getCount());
+						// print speed
+						System.out.println(String.format("%s average speed (%s)", info.getState(),
+								formatSpeed(speedInfo.getAverageSpeed())));
+						break;
+					case RETRYING:
+						System.out.println(info.getState() + " " + info.getDelay());
+						break;
+					case DOWNLOADING:
+						speedInfo.step(info.getCount());
+						long now = System.currentTimeMillis();
+						if (now - 1000 > last) {
+							last = now;
 							
-							break;
-						default:
-							break;
+							if (info.getParts() == null) {
+								if (info.getState().equals(States.DOWNLOADING)) {
+									
+								}
+							} else {
+
+							String parts = "";
+
+							for (Part p : info.getParts()) {
+								if (p.getState().equals(States.DOWNLOADING)) {
+									parts += String.format("Part#%d(%.2f) ", p.getNumber(),
+											p.getCount() / (float) p.getLength());
+								}
+							}
+
+							float p = info.getCount() / (float) info.getLength();
+
+							System.out.println(String.format("%.2f %s (%s / %s)", p, parts,
+									formatSpeed(speedInfo.getCurrentSpeed()),
+									formatSpeed(speedInfo.getAverageSpeed())));
+							}
 						}
+
+						break;
+					default:
+						break;
+					}
 				}
-				public void shutdown() {
-			        this.shutdown = true;
-			    }
 			};
 
 			// choice file
 			URL url = new URL("http://djhrn44g26er2.cloudfront.net/" + this.url);
 			// initialize url information object with or without proxy
-			// info = new DownloadInfo(url, new ProxyInfo("proxy_addr", 8080, "login", "password"));
-			if(info == null){
+			// info = new DownloadInfo(url, new ProxyInfo("proxy_addr", 8080,
+			// "login", "password"));
+			if (info == null) {
 				info = new DownloadInfo(url);
 				// extract information from the web
 				info.extract(stop, notify);
@@ -161,23 +165,30 @@ public class Downloader implements Runnable {
 			}
 			// Choice target file or set download folder
 			String filename = url.getPath();
-
+			
+			if (filename.contains("thumb")) {
+				System.out.println("contains thumb");
+				filename = filename.replace(".tif.thumb", "-thumb.tif");
+				System.out.println(filename);
+			}
+			
 			File f = new File(directory + filename);
 			int version = 1;
 			String versionFileName = url.getFile().substring(0, url.getPath().length() - 4);
 			String newFilename = versionFileName;
-
-			if(first){
+				
+			if (first) {
 				while (f.exists()) {
-					newFilename= versionFileName + "(" + version + ")";
+					newFilename = versionFileName + "(" + version + ")";
 					f = new File(directory + newFilename + ".tif");
 					version++;
 				}
 
 				target = f;
 			}
-			// Cheap way to ensure that Downloader instance only checks for 
-			// adding new files on first Download start, otherwise we are resuming.
+			// Cheap way to ensure that Downloader instance only checks for
+			// adding new files on first Download start, otherwise we are
+			// resuming.
 			first = false;
 			// create wget downloader
 			WGet w = new WGet(info, target);
@@ -186,42 +197,38 @@ public class Downloader implements Runnable {
 			speedInfo.start(info.getCount());
 			// will blocks until download finishes
 			System.out.println("STARTING DOWNLOAD!!");
-			while(info.getState() != URLInfo.States.DONE && !this.stopDownload){
+			while (info.getState() != URLInfo.States.DONE) {
 				try {
-					synchronized(this) {
+					synchronized (this) {
 						while (this.pause)
-							wait();     
+							wait();
 					}
 				} catch (InterruptedException e1) {
 					// TODO Auto-generated catch block
-					//this.pause = false;
-					//this.run();
-					//this.pause = true;
-					System.out.println("RESUMEING");
+					// this.pause = false;
+					// this.run();
+					// this.pause = true;
+					System.out.println("RESUMING");
 					w = new WGet(info, target);
 				}
-				try{
+				try {
 					w.download(stop, notify);
-				} catch (DownloadInterruptedError e){
-					System.out.println("DOWNLOAD PAUSED");	
+				} catch (DownloadInterruptedError e) {
+					System.out.println("DOWNLOAD PAUSED");
 				}
 			}
-            
+
 		} catch (DownloadMultipartError e) {
 			for (Part p : e.getInfo().getParts()) {
 				Throwable ee = p.getException();
 				if (ee != null)
 					ee.printStackTrace();
 			}
-				
+
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	public void setShutdown(boolean b) {
-		this.shutDown = b;
 	}
 }
