@@ -169,22 +169,29 @@ public class DatabaseTable extends VBox {
 		rd.close();
 		return result.toString();
 	}
-
+	
+	//given input from search bar, filter the list("data") based on input into a new filtered list
+	//set database table items to the filtered list
 	public void updateFilter(String input) {
+		//clear list
 		filteredData.clear();
-		for(DownloadableFile file : data) {
-			if(matches(file, input)) {
-				filteredData.add(file);
+		for(DownloadableFile file : data) {	//loop through "data" list
+			if(matches(file, input)) {	//compare input and file in "matches" method
+				filteredData.add(file);		//if match, add to filtered list
 			}
 		}
+		//clear database table
 		ArrayList<TableColumn<DownloadableFile, ?>> order = new ArrayList<>(dbTable.getSortOrder());
         dbTable.getSortOrder().clear();
         dbTable.getSortOrder().addAll(order);
+        	//set new filtered list to database table
 		dbTable.setItems(filteredData);
 	}
 	
+	//returns true if file matches input else false
 	private Boolean matches(DownloadableFile file, String input) {
 		String lowerCaseFilter = input.toLowerCase();
+		//if no input, then returns whole list
 		if(input == null || input.isEmpty()) {
 			return true;
 		}	
@@ -197,6 +204,7 @@ public class DatabaseTable extends VBox {
 		return false;
 	}
 	
+	//menubar to access fields such as searchBar
 	public void setMenuBar(MenuBarNode menuBar) {
 		this.menuBar = menuBar;
 	}
