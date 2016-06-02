@@ -20,7 +20,7 @@ public class LoginScene {
 	private User user;
 	private boolean loggedIn = false;
 	
-	public LoginScene(String type, User user) {
+	public LoginScene(String type, User user) {	//create scene based on type("login" scene, display "profile" scene, "edit" profile scene)
 		this.user = user;
 		if(type == "login") {
 			createScene();
@@ -39,7 +39,8 @@ public class LoginScene {
 		
 	}
 	
-	private void createScene() {
+	//generate the login pop up with textfields, buttons on a gridpane
+	private void createScene() {	
         GridPane grid = new GridPane();
         this.scene = new Scene(grid, 500, 200);
         grid.setAlignment(Pos.CENTER);
@@ -70,9 +71,11 @@ public class LoginScene {
         Button forgotBtn = new Button();
         forgotBtn.setText("Forgot name/pass?");
         
+        //login button action
         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				//compares textfield input to User object's username,password and if correct, login
 				if (!loggedIn && userTextField.getText().equals(user.getUsername()) && pwBox.getText().equals(user.getPassword())) {
 					loggedIn = true;
 					actiontarget.setFill(Color.GREEN);
@@ -82,20 +85,21 @@ public class LoginScene {
 					userTextField.setText("");
 					pwBox.setDisable(true);
 					pwBox.setText("");
-				} else if(loggedIn){
+				} else if(loggedIn){	//logout button pressed
 					loggedIn = false;
 					actiontarget.setFill(Color.GREEN);
 					actiontarget.setText("You are now logged out.");
 					loginBtn.setText("Login");
 					userTextField.setDisable(false);
 					pwBox.setDisable(false);
-				} else {
+				} else {	//incorrect input
 					actiontarget.setFill(Color.FIREBRICK);
 					actiontarget.setText("Wrong username or pass.");
 				}
 			}
         });
-        
+        //forgot password button
+        //feature not available
         forgotBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -104,6 +108,7 @@ public class LoginScene {
 			}
         });
         
+        //HBox for buttons
         HBox hbBtn = new HBox(10);
 	    hbBtn.setAlignment(Pos.BOTTOM_RIGHT); 
 	    hbBtn.getChildren().add(forgotBtn);
@@ -112,6 +117,8 @@ public class LoginScene {
 	    
 	}
 	
+	//generate profile pop up on a gridpane
+	//get User object's fields to display on pop up
 	private void createProfileScene() {
         GridPane grid = new GridPane();
         this.scene = new Scene(grid, 400, 300);
@@ -160,10 +167,12 @@ public class LoginScene {
         
         Button editBtn = new Button();
         editBtn.setText("Edit Profile");
-
+	
+	//edit Button action
         editBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				//create edit pop up scene
 				LoginScene editScene = new LoginScene("edit", user);
 				PopUp editStage = new PopUp("Edit Profile", editScene.getScene());
 				editStage.show();
@@ -172,7 +181,7 @@ public class LoginScene {
         
         Button exitBtn = new Button();
         exitBtn.setText("OK");
-
+	//exit button action, exit pop up
         exitBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -186,6 +195,8 @@ public class LoginScene {
 	    hbBtn.getChildren().add(exitBtn);
 	    grid.add(hbBtn, 1, 4);
 	}
+	
+	//generate edit pop up on a gridpane
 	private void createEditScene() {
         GridPane grid = new GridPane();
         this.scene = new Scene(grid, 400, 300);
@@ -235,9 +246,11 @@ public class LoginScene {
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
         
+        //save button action
         saveBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				//compare if input and reinput match otherwise no changes and error is displayed
 				if(!(pwField.getText().equals(rePwField.getText()))) {
 					actiontarget.setFill(Color.FIREBRICK);
 			        actiontarget.setText("Password does not match");
@@ -258,7 +271,7 @@ public class LoginScene {
 				}
 			}
         });
-        
+        //cancel button action, cancel and exit edit pop up
         cancelBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -266,6 +279,7 @@ public class LoginScene {
 			}
         });
         
+        //HBox for buttons
         HBox hbBtn = new HBox(10);
 	    hbBtn.setAlignment(Pos.BOTTOM_RIGHT); 
 	    hbBtn.getChildren().add(saveBtn);
