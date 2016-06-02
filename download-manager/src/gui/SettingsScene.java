@@ -163,6 +163,7 @@ public class SettingsScene {
 			}
 		});
 		
+		//save directory change and exit popup
 		Button saveButton = new Button("Save");
 		saveButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -174,7 +175,7 @@ public class SettingsScene {
 			}
 			
 		});
-		
+		//revert any changes to directory to original and exit popup
 		Button cancelButton = new Button("Cancel");
 		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
