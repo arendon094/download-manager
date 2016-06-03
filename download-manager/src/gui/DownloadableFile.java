@@ -1,6 +1,23 @@
+/**
+ * 
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * This code is produced by the California State University of Los Angeles for
+ * the Jet Propulsion Laboratory (JPL).
+ */
 package gui;
 
 import javafx.scene.image.Image;
+
+/**
+ * This class handles the meta data and thumbnail for an GeoTIFF file from the S3 bucket.
+ * 
+ * @author Rowan Edge
+ * @author Mariah Martinez
+ * 
+ */
 
 public class DownloadableFile {
 	
