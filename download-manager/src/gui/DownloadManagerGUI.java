@@ -14,6 +14,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * This class class is responsible for running the GUI
+ * 
+ * @author Mariah Martinez
+ * @author Adrian Rendon
+ * 
+ */
+
 public class DownloadManagerGUI extends Application {
 
 	private ReadOnlyDoubleProperty sceneHeight;
@@ -67,7 +75,7 @@ public class DownloadManagerGUI extends Application {
 		VBox bottomPane = new VBox();
 		bottomPane.setSpacing(10);
 		
-		// Add item to the bottomPane
+		// Add summary to the bottomPane
 		bottomPane.getChildren().addAll(new Separator(), summary);
 		
 
