@@ -28,6 +28,7 @@ import com.github.axet.wget.info.ex.DownloadMultipartError;
  * 
  * @author Rowan Edge
  * @author Mariah Martinez
+ * @author Kevin Tu
  * @author Gregory Miles
  */
 
