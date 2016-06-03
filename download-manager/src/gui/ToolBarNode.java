@@ -17,6 +17,13 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * This class is responsible for the toolbar section of the GUI
+ * 
+ * @author Mariah Martinez
+ * @author Adrian Rendon
+ */
+
 public class ToolBarNode extends ToolBar{
 	private DatabaseTable dbTable;
 	AtomicBoolean stopAtomic = new AtomicBoolean(false);
@@ -57,12 +64,6 @@ public class ToolBarNode extends ToolBar{
 			table.resumetItem();
 		});
 		
-//		resume.setOnAction((event) -> {
-//			Downloader downloader = new Downloader();
-//			downloader.run();
-//			System.out.println("running.....?");
-//		});
-		
 		Button pause = new Button();
 		pause.setTooltip(new Tooltip("Pause"));
 		pause.setGraphic(new ImageView(pauseImage));
@@ -101,8 +102,10 @@ public class ToolBarNode extends ToolBar{
 	}
 	
 	private void addSearchBar(){
+		// Image icon also 16px
 		Image mGlassImage = new Image("images/search-16.png");
 		
+		// Text field to be used for db filtering
 		final TextField searchField = new TextField("");
         searchField.setPromptText("Search");
         
@@ -111,11 +114,12 @@ public class ToolBarNode extends ToolBar{
 		mglass.setGraphic(new ImageView(mGlassImage));
 		mglass.getStyleClass().add("button-icon");
 		
+		// Handles filtering
 		mglass.setOnAction((event) -> {
 			dbTable.updateFilter(searchField.getText());
 		});
 
-		// Moves position of both search field and button by 650 to the right
+		// Moves position of both search field and button by 450 to the right
 		searchField.setTranslateX(450);
 		mglass.setTranslateX(450);
 
