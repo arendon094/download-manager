@@ -1,3 +1,12 @@
+/**
+ * 
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * This code is produced by the California State University of Los Angeles for
+ * the Jet Propulsion Laboratory (JPL).
+ */
 package gui;
 
 import java.util.concurrent.Executors;
@@ -8,6 +17,17 @@ import com.github.axet.wget.Downloader;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
+
+/**
+ * This class handles the meta-data for an downloading GeoTIFF file
+ * from the S3 bucket.  Additionally, each object of this class for each,
+ * downloading file will spin off a thread which updates the meta-data once
+ * a second.
+ * 
+ * @author Rowan Edge
+ * @author Mariah Martinez
+ * @author Gregory Miles
+ */
 
 public class DownloadingFile {
 	private SimpleStringProperty name;
@@ -41,7 +61,15 @@ public class DownloadingFile {
 			executor.scheduleAtFixedRate(helloRunnable, 0, 1, TimeUnit.SECONDS);
 		}
 	}
-	
+
+    	/**
+ 	 * Called once a second by the runnable to change the 
+ 	 * associated PropertyValueFactory associated cell in
+	 * a the DownloadsTable of the donwload-manager.
+	 *
+	 * @param  	void
+	 * @return      void
+	 */
 	private void refresh() {
 		this.speed.set(this.downloader.formatSpeed(this.downloader.getSpeedInfo().getCurrentSpeed()));
 		this.size.set(String.format("%.2f",this.downloader.getSize()/1000000.0));
@@ -64,7 +92,11 @@ public class DownloadingFile {
 	public String getSize() {
 		return this.size.get();	
 	}
-	
+
+    // Required code format for PropertyValueFactory
+    // to listen on changes for these values. <value>Property
+    // must be the name of the function.
+    
 	public SimpleStringProperty nameProperty(){
 		return this.name;
 	}

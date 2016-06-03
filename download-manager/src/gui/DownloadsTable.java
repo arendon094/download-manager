@@ -1,3 +1,13 @@
+/**
+ * 
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * This code is produced by the California State University of Los Angeles for
+ * the Jet Propulsion Laboratory (JPL).
+ */
+
 package gui;
 
 import java.io.File;
@@ -31,13 +41,33 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.util.Callback;
 
+/**
+ * This class contains methods associated with the DownloadsTable, which displays
+ * meta-data assoicated with GeoTIFF files which have been selected for downloading.
+ * Additionally, this class contians the JavaFX code to build the Downloads table
+ * GUI components and the associated logic with the DownloadingFile objects interactions
+ * such as Pause / Resume and Delete along with update of the meta-data.
+ * 
+ * @author Rowan Edge
+ * @author Mariah Martinez
+ * @author Kevin Tu
+ * @author Gregory Miles
+ */
+
 public class DownloadsTable extends VBox{
 	
 	private Downloader downloader;
 	private TableView<DownloadingFile> downloadsTable;
 	private DatabaseTable dbTable;
 	private ObservableMap<DownloadingFile, Thread> threadMap;
-	
+
+    /**
+     * Constructor
+     *
+     *
+     * @param  	downloader An associated global downloader object (deprecated)
+     * @param   db  The Database table instance.
+     */
 	public DownloadsTable(Downloader downloader, DatabaseTable db) {
 		this.downloader = downloader;
 		this.dbTable = db;
@@ -52,6 +82,15 @@ public class DownloadsTable extends VBox{
         });
 	}
 
+    
+    /**
+     * This method builds the inital DownloadTable GUI and sets up 
+     * the auto-update of table cells.
+     *
+     * @param  	void
+     * @return      void
+     */
+
 	public void createTable() {
 		this.getStylesheets().add("style/metroLight.css");
 		this.getStyleClass().add("background");
@@ -65,13 +104,13 @@ public class DownloadsTable extends VBox{
 		TableColumn<DownloadingFile,Double>  status = new TableColumn<>("status");
 		TableColumn<DownloadingFile,String> speed = new TableColumn<>("speed");
 
-		//Everytime the cell value is for speed item in DownloadingFile update table
+		// Everytime the cell value is for speed item in DownloadingFile update table
 		speed.setCellValueFactory(new PropertyValueFactory<DownloadingFile, String>("speed"));
-		//Set text 
+		// Set text 
 		speed.setText("Speed");
 		
 		status.setCellValueFactory(new PropertyValueFactory<DownloadingFile, Double>("status"));
-		//Set text 
+		// Set text 
 		status.setText("Status");
 		
 		size.setCellValueFactory(new PropertyValueFactory<DownloadingFile, String>("size"));
@@ -92,6 +131,9 @@ public class DownloadsTable extends VBox{
 		this.setSpacing(5);
 		this.setPadding(new Insets(10, 10, 10, 10));
 		this.getChildren().addAll(downloadsTable);
+
+
+		// Set for auto-update via PropertyValueFactory.
 		
 		fileName.setCellValueFactory(new PropertyValueFactory<>("name"));
 		size.setCellValueFactory(new PropertyValueFactory<>("size"));
@@ -100,6 +142,17 @@ public class DownloadsTable extends VBox{
 
 		
 	}
+
+
+    /**
+     * This method resumes download upon click of "Resume button". 
+     * Iterates through HashMap of associated DownloadingFiles mapping to Threads,
+     * and toggles the pause attribute of the associated DownloadingFiles Downloader object,
+     * and interrupts the Thread running that Downloader object.
+     *
+     * @param  	void
+     * @return      void
+     */
 	
 	public synchronized void resumetItem() {
 		if(this.dbTable != null){
@@ -118,6 +171,17 @@ public class DownloadsTable extends VBox{
 			}
 		}
 	}
+
+
+    /**
+     * This method pauses download upon click of "Pause button". 
+     * Iterates through HashMap of associated DownloadingFiles mapping to Threads,
+     * and toggles the pause attribute of the associated DownloadingFiles Downloader object,
+     * and interrupts the Thread running that Downloader object.
+     *
+     * @param  	void
+     * @return      void
+     */
 	
 	public void pauseItem() {
 		
