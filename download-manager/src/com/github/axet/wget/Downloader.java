@@ -1,3 +1,12 @@
+/**
+ * 
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * This code is produced by the California State University of Los Angeles for
+ * the Jet Propulsion Laboratory (JPL).
+ */
 package com.github.axet.wget;
 
 import java.io.File;
@@ -10,6 +19,17 @@ import com.github.axet.wget.info.DownloadInfo.Part;
 import com.github.axet.wget.info.DownloadInfo.Part.States;
 import com.github.axet.wget.info.ex.DownloadInterruptedError;
 import com.github.axet.wget.info.ex.DownloadMultipartError;
+
+/**
+ * This class consists of methods which are run by the download-manager
+ * upon download initiation and whose purpose is to connect to an AWS
+ * CloudFront CDN and complete the download of a GeoTIFF file from
+ * an S3 bucket which may or may not be cached at the AWS CloudFront CDN.
+ * 
+ * @author Rowan Edge
+ * @author Mariah Martinez
+ * @author Gregory Miles
+ */
 
 public class Downloader implements Runnable {
 	private String directory = System.getProperty("user.home") + "/Downloads";
@@ -79,6 +99,13 @@ public class Downloader implements Runnable {
 		return info;
 	}
 
+	/**
+ 	 * Converts a input size given in bytes to a human readable form in
+ 	 * KB, MB or GB.  If size is larger than GB the behavoir is undefined.
+	 *
+	 * @param  	s	A value in bytes.
+	 * @return      A string representation of input value in KB, MB or GB.
+	 */
 	public static String formatSpeed(long s) {
 		if (s > 0.1 * 1024 * 1024 * 1024) {
 			float f = s / 1024f / 1024f / 1024f;
@@ -92,6 +119,13 @@ public class Downloader implements Runnable {
 		}
 	}
 
+	/**
+ 	 * Uses Downloader object settings directory and url to begin download
+ 	 * of item from S3 via AWS CloudFront CDN.
+	 *
+	 * @param  	void
+	 * @return      void
+	 */
 	public void run() {
 		try {
 			notify = new Runnable() {
@@ -151,7 +185,7 @@ public class Downloader implements Runnable {
 				}
 			};
 
-			// choice file
+			// choice file, link to CloudFront and path for S3 bucket.
 			URL url = new URL("http://djhrn44g26er2.cloudfront.net/" + this.url);
 			// initialize url information object with or without proxy
 			// info = new DownloadInfo(url, new ProxyInfo("proxy_addr", 8080,
@@ -172,6 +206,8 @@ public class Downloader implements Runnable {
 				System.out.println(filename);
 			}
 			
+			// This will choose where the file is being saved and name the initial file based on
+			// the name in the S3 bucket.
 			File f = new File(directory + filename);
 			int version = 1;
 			String versionFileName = url.getFile().substring(0, url.getPath().length() - 4);
@@ -197,6 +233,13 @@ public class Downloader implements Runnable {
 			speedInfo.start(info.getCount());
 			// will blocks until download finishes
 			System.out.println("STARTING DOWNLOAD!!");
+			
+			// This controls the pause / resume of the download.
+			// Each Downloader object instance is running inside a thread.
+			// When that thread is interrupted, the pause state is enabled and the
+			// thread will wait until another interrupt is received which will toggle the pause
+			// state again.  This will continue until the DONE state is reached or the program
+			// is shutdown.
 			while (info.getState() != URLInfo.States.DONE) {
 				try {
 					synchronized (this) {
