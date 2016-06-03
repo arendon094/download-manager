@@ -1,3 +1,12 @@
+/**
+ * 
+ * This code is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.
+ * 
+ * This code is produced by the California State University of Los Angeles for
+ * the Jet Propulsion Laboratory (JPL).
+ */
 package gui;
 
 import java.io.BufferedReader;
@@ -30,6 +39,22 @@ import com.github.axet.wget.info.DownloadInfo;
 import com.github.axet.wget.info.URLInfo;
 import com.github.axet.wget.info.DownloadInfo.Part.States;
 
+/**
+ * This class contains methods associated with the DatabaseTable, which displays
+ * meta-data assoicated with GeoTIFF files from the S3 bucket which are available for download,
+ * to the user.  This class communicates with the S3 bucket and pulls the required information from
+ * the bucket.
+ * <p>
+ * Additionally, this class contians the JavaFX code to build the DatabaseTable
+ * GUI components and the associated logic such as character match searching to filter out results.
+ * This class also handles the instantiation of DownloadingFile objects when an object is selected for
+ * downloading and the running of that objects thread which will then start the GeoTIFF file's download.
+ * 
+ * @author Rowan Edge
+ * @author Mariah Martinez
+ * @author Kevin Tu
+ * @author Gregory Miles
+ */
 
 public class DatabaseTable extends VBox {
 	private TableView<DownloadableFile> dbTable;

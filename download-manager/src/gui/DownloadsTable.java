@@ -44,7 +44,7 @@ import javafx.util.Callback;
 /**
  * This class contains methods associated with the DownloadsTable, which displays
  * meta-data assoicated with GeoTIFF files which have been selected for downloading.
- * Additionally, this class contians the JavaFX code to build the Downloads table
+ * Additionally, this class contians the JavaFX code to build the DownloadsTable
  * GUI components and the associated logic with the DownloadingFile objects interactions
  * such as Pause / Resume and Delete along with update of the meta-data.
  * 
