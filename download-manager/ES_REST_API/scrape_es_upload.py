@@ -105,11 +105,13 @@ class es_upload():
         root = tree.getroot()         
         layer_insert_dict = {}
         bulk_upload = []
+        f = open('lmmp_api.txt','r')
+        lmmp_api = f.readline().strip()
         
         for layers in root:
             for layer in layers:
                 if layer.tag == "Metadata":
-                    self.scrape_html(layer.text,bulk_upload)
+                    self.scrape_html(layer.text,lmmp_api,bulk_upload)
                 #print(layer.tag,layer.attrib)
                 if layer.tag == "bounding":
                     if 'proj' in layer.attrib:
@@ -126,9 +128,7 @@ class es_upload():
         #print(bulk_upload)
         helpers.bulk(self.es,bulk_upload)
 
-    def scrape_html(self,html_link,array):
-        f = open('lmmp_api.txt','r')
-        lmmp_api = f.readline().strip()
+    def scrape_html(self,html_link,lmmp_api,array):
         page = requests.get(lmmp_api+html_link).text
         doc = html.fromstring(page)
         meta_list = doc.cssselect('meta')
